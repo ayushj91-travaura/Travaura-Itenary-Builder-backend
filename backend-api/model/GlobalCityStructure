@@ -1,0 +1,28 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const CityStructureSchema = new Schema({
+    activitySpots: [String]
+}, { _id: false });
+
+const CountrySchema = new Schema({
+    name: String,
+    regions: {
+        type: Map,
+        of: {
+            type: Map,
+            of: CityStructureSchema
+        }
+    }
+}, { _id: false });
+
+const GlobalCityStructureSchema = new Schema({
+    countries: {
+        type: Map,
+        of: CountrySchema
+    }
+});
+
+const GlobalCityStructure = mongoose.model('GlobalCityStructure', GlobalCityStructureSchema);
+
+module.exports = GlobalCityStructure;
