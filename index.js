@@ -6,17 +6,29 @@ const app = express();
 
 app.use(cors());
 
-const mongoDB = 'mongodb://127.0.0.1:27017/Travaura';
-mongoose.connect(mongoDB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-  .then(() => {
-    console.log('Connected to MongoDB!');
+// const mongoDB = 'mongodb://127.0.0.1:27017/Travaura';
+// mongoose.connect(mongoDB, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// })
+//   .then(() => {
+//     console.log('Connected to MongoDB!');
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//   });
+
+  const mongoAtlasDB = 'mongodb+srv://travauratech:travauratech@cluster0.zqfkwop.mongodb.net/';
+  mongoose.connect(mongoAtlasDB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
   })
-  .catch((err) => {
-    console.error(err);
-  });
+    .then(() => {
+      console.log('Connected to MongoDB Atlas!');
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 
 const data = require('./backend-api/model/data');
 
@@ -111,6 +123,12 @@ app.get('/api/globalCityStructure', async (req, res) => {
 }
 );
 
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
+  
+});
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
