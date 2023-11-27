@@ -110,7 +110,7 @@ app.get('/api/vietnamCityStructure', async (req, res) => {
 }
 );
 
-const globalCityStructure = require('./backend-api/model/globalCityStructure');
+const globalCityStructure = require('./backend-api/model/GlobalCityStructure');
 
 app.get('/api/globalCityStructure', async (req, res) => {
   try {
