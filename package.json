@@ -17,7 +17,11 @@
     "mongoose": "^8.0.0"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "nodemon": "^3.0.1",
+=======
+     "nodemon": "^3.0.1",
+>>>>>>> 2fdd6704d0658a375e5788a5c21c47bb2c75a15c
     "tailwindcss": "^3.3.5",
     "webpack-cli": "^5.1.4"
   }
