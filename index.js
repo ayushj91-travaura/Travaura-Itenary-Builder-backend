@@ -6,17 +6,29 @@ const app = express();
 
 app.use(cors());
 
-const mongoDB = 'mongodb://127.0.0.1:27017/Travaura';
-mongoose.connect(mongoDB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-  .then(() => {
-    console.log('Connected to MongoDB!');
+// const mongoDB = 'mongodb://127.0.0.1:27017/Travaura';
+// mongoose.connect(mongoDB, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// })
+//   .then(() => {
+//     console.log('Connected to MongoDB!');
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//   });
+
+  const mongoAtlasDB = 'mongodb+srv://travauratech:travauratech@cluster0.zqfkwop.mongodb.net/';
+  mongoose.connect(mongoAtlasDB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
   })
-  .catch((err) => {
-    console.error(err);
-  });
+    .then(() => {
+      console.log('Connected to MongoDB Atlas!');
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 
 const data = require('./backend-api/model/data');
 
