@@ -18,7 +18,7 @@ app.use(cors());
 //     console.error(err);
 //   });
 
-  const mongoAtlasDB = 'mongodb+srv://travauratech:travauratech@cluster0.zqfkwop.mongodb.net/';
+  const mongoAtlasDB = process.env.MONGODB_URI;
   mongoose.connect(mongoAtlasDB, {
     useNewUrlParser: true,
     useUnifiedTopology: true
