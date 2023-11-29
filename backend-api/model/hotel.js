@@ -1,34 +1,20 @@
 const mongoose = require('mongoose');
 
 const hotelSchema = new mongoose.Schema({
-  category: String,
-  name: String,
-  images: [String],
-  roomType: String,
-  mapRoomPrice: Number,
-  cpRoomPrice: Number,
-  epRoomPrice: Number,
-  rating: Number,
+  _id: mongoose.Schema.Types.ObjectId,
+  Region: String,
+  City: String,
+  Category: String,
+  Name: String,
+  RoomType: String,
+  MAPRoomPrice: Number,
+  CPRoomPrice: Number,
+  EPRoomPrice: Number,
+  PriceType: String,
+  Rating: Number
 });
 
-const citySchema = new mongoose.Schema({
-  hotels: [hotelSchema],
-});
 
-const regionSchema = new mongoose.Schema({
-  cities: {
-    type: Map,
-    of: citySchema,
-  },
-});
-
-const hoteldataSchema = new mongoose.Schema({
-  regions: {
-    type: Map,
-    of: regionSchema,
-  },
-});
-
-const Hoteldata = mongoose.model('Hoteldata', hoteldataSchema);
+const Hoteldata = mongoose.model('Hoteldata', hotelSchema);
 
 module.exports = Hoteldata;

@@ -4,8 +4,11 @@ const cors = require('cors');
 const path = require('path');
 const app = express();
 require('dotenv').config();
+const bodyParser = require('body-parser');
+
 
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // const mongoDB = 'mongodb://127.0.0.1:27017/Travaura';
 // mongoose.connect(mongoDB, {
@@ -96,6 +99,39 @@ app.get('/api/hotel', async (req, res) => {
   }
 });
 
+app.post('/api/hotel', (req, res) => {
+  const hotelData = new hotel({
+    regions: {
+      [req.body.regionName]: {
+        cities: {
+          [req.body.cityName]: {
+            hotels: [{
+              category: req.body.category,
+              name: req.body.name,
+              images: req.body.images.spilt(','),
+              roomType: req.body.roomType,
+              mapRoomPrice: req.body.mapRoomPrice,
+              cpRoomPrice: req.body.cpRoomPrice,
+              epRoomPrice: req.body.epRoomPrice,
+              rating: req.body.rating
+            }]
+          }
+        }
+      }
+    }
+  });
+
+
+  hotelData.save((err) => {
+    if (!err) {
+      res.send('Successfully added hotel data.');
+    } else {
+      res.send(err);
+    }
+  });
+});
+
+
 const vietnamCityStructure = require('./backend-api/model/vietnamCityStructure');
 
 app.get('/api/vietnamCityStructure', async (req, res) => {
@@ -131,3 +167,15 @@ app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
   
 });
+
+
+// regionName: '',
+//     cityName: '',
+//     category: '',
+//     name: '',
+//     images: '',
+//     roomType: '',
+//     mapRoomPrice: 0,
+//     cpRoomPrice: 0,
+//     epRoomPrice: 0,
+//     rating: 0

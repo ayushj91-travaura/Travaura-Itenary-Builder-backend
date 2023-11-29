@@ -2,22 +2,30 @@
 const mongoose = require('mongoose');
 
 const dataSchema = new mongoose.Schema({
-  "Country": "string",
-  "PartOfCountry": "string",
-  "EventCode": "number",
-  "HeadingOfEvent": "string",
-  "ShortDescription": "string",
-  "LongDescription": "string",
-  "DurationOfEvent": "string",
-  "TransferInclusion": "string",
-  "GroupType": "string",
-  "PricePerPax": "number",
-  "MealDuringEvent": "string",
-  "AccommodationForTheNight": "string",
-  "CityOfAccommodation": "string",
-  "StartTimeOfEvent": "string",
-  "EndTimeOfEvent": "string",
-  "Transfers": "string"
+  Country: String,
+    PartOfCountry: String,
+    CityOfAccommodation: String,
+    EventCode: Number,
+    City: String,
+    HeadingOfEvent: String,
+    SICPrice: Number,
+    Breakfast: String,
+    Lunch: String,
+    Dinner: String,
+    ShortDescription: String,
+    LongDescription: String,
+    DurationOfEvent: String,
+    TimeSlot: String,
+    TransferInclusion: String,
+    GroupType: String,
+    PricePerPax: Number,
+    PriceInRupees: Number,
+    PriceType: String,
+    MealDuringEvent: String,
+    AccommodationForTheNight: String,
+    StartTimeOfEvent: String,
+    EndTimeOfEvent: String,
+    Transfers: String
 }
 );
 
