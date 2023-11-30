@@ -2,10 +2,9 @@
   "name": "travaura",
   "version": "1.0.0",
   "description": "api with dummy data",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-    
   },
   "author": "Ayush Jha",
   "license": "ISC",
@@ -20,7 +19,6 @@
   "devDependencies": {
     
     "tailwindcss": "^3.3.5"
-  
   },
   "engines": {
     "node": ">=15.0.0"

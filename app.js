@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 
 
-  const mongoAtlasDB = 'mongodb+srv://travauratech:travauratech@cluster0.zqfkwop.mongodb.net/' ;
+  const mongoAtlasDB ='mongodb+srv://travauratech:travauratech@cluster0.zqfkwop.mongodb.net/' ;
   mongoose.connect(mongoAtlasDB, {
     useNewUrlParser: true,
     useUnifiedTopology: true
