@@ -10,17 +10,7 @@ const bodyParser = require('body-parser');
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// const mongoDB = 'mongodb://127.0.0.1:27017/Travaura';
-// mongoose.connect(mongoDB, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// })
-//   .then(() => {
-//     console.log('Connected to MongoDB!');
-//   })
-//   .catch((err) => {
-//     console.error(err);
-//   });
+
 
   const mongoAtlasDB = 'mongodb+srv://travauratech:travauratech@cluster0.zqfkwop.mongodb.net/' ;
   mongoose.connect(mongoAtlasDB, {
@@ -99,37 +89,29 @@ app.get('/api/hotel', async (req, res) => {
   }
 });
 
-app.post('/api/hotel', (req, res) => {
-  const hotelData = new hotel({
-    regions: {
-      [req.body.regionName]: {
-        cities: {
-          [req.body.cityName]: {
-            hotels: [{
-              category: req.body.category,
-              name: req.body.name,
-              images: req.body.images.spilt(','),
-              roomType: req.body.roomType,
-              mapRoomPrice: req.body.mapRoomPrice,
-              cpRoomPrice: req.body.cpRoomPrice,
-              epRoomPrice: req.body.epRoomPrice,
-              rating: req.body.rating
-            }]
-          }
-        }
-      }
-    }
+app.post('/api/hotel', async (req, res) => {
+  const hoteldata = new hotel({
+    _id: new mongoose.Types.ObjectId(),
+    Region: req.body.Region,
+    City: req.body.City,
+    Category: req.body.Category,
+    Name: req.body.Name,
+    RoomType: req.body.RoomType,
+    MAPRoomPrice: req.body.MAPRoomPrice,
+    CPRoomPrice: req.body.CPRoomPrice,
+    EPRoomPrice: req.body.EPRoomPrice,
+    PriceType: req.body.PriceType,
+    Rating: req.body.Rating
   });
-
-
-  hotelData.save((err) => {
-    if (!err) {
-      res.send('Successfully added hotel data.');
-    } else {
-      res.send(err);
-    }
-  });
+  
+  try {
+    console.log(req.body);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
+
 
 
 const vietnamCityStructure = require('./backend-api/model/vietnamCityStructure');
@@ -169,13 +151,14 @@ app.listen(PORT, () => {
 });
 
 
-// regionName: '',
-//     cityName: '',
-//     category: '',
-//     name: '',
-//     images: '',
-//     roomType: '',
-//     mapRoomPrice: 0,
-//     cpRoomPrice: 0,
-//     epRoomPrice: 0,
-//     rating: 0
+// /_id: mongoose.Schema.Types.ObjectId,
+// Region: String,
+// City: String,
+// Category: String,
+// Name: String,
+// RoomType: String,
+// MAPRoomPrice: Number,
+// CPRoomPrice: Number,
+// EPRoomPrice: Number,
+// PriceType: String,
+// Rating: Number
