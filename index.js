@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 
 
@@ -89,22 +90,46 @@ app.get('/api/hotel', async (req, res) => {
   }
 });
 
-app.post('/api/hotel', async (req, res) => {
-  const hoteldata = new hotel({
-    _id: new mongoose.Types.ObjectId(),
-    Region: req.body.Region,
-    City: req.body.City,
-    Category: req.body.Category,
-    Name: req.body.Name,
-    RoomType: req.body.RoomType,
-    MAPRoomPrice: req.body.MAPRoomPrice,
-    CPRoomPrice: req.body.CPRoomPrice,
-    EPRoomPrice: req.body.EPRoomPrice,
-    PriceType: req.body.PriceType,
-    Rating: req.body.Rating
-  });
+// app.post('/api/hotel', async (req, res) => {
+//   const hoteldata = new hotel({
+//     _id: new mongoose.Types.ObjectId(),
+//     Region: req.body.Region,
+//     City: req.body.City,
+//     Category: req.body.Category,
+//     Name: req.body.Name,
+//     RoomType: req.body.RoomType,
+//     MAPRoomPrice: req.body.MAPRoomPrice,
+//     CPRoomPrice: req.body.CPRoomPrice,
+//     EPRoomPrice: req.body.EPRoomPrice,
+//     PriceType: req.body.PriceType,
+//     Rating: req.body.Rating
+//   });
   
+//   try {
+//     console.log(req.body);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
+
+app.post('/api/hotel', async (req, res) => {
   try {
+    const hoteldata = new hotel({
+      _id: new mongoose.Types.ObjectId(),
+      Region: req.body.Region,
+      City: req.body.City,
+      Category: req.body.Category,
+      Name: req.body.Name,
+      RoomType: req.body.RoomType,
+      MAPRoomPrice: req.body.MAPRoomPrice,
+      CPRoomPrice: req.body.CPRoomPrice,
+      EPRoomPrice: req.body.EPRoomPrice,
+      PriceType: req.body.PriceType,
+      Rating: req.body.Rating
+    });
+    await hoteldata.save();
+    res.send(hoteldata);
     console.log(req.body);
   } catch (error) {
     console.error(error);
