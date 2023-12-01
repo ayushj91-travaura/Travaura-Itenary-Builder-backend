@@ -13,10 +13,6 @@ app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 
-
-
-
-
   const mongoAtlasDB ='mongodb+srv://travauratech:travauratech@cluster0.zqfkwop.mongodb.net/' ;
   mongoose.connect(mongoAtlasDB, {
     useNewUrlParser: true,
@@ -70,18 +66,7 @@ app.get('/api/flight', async (req, res) => {
   }
 });
 
-const bustrain = require('./backend-api/model/bustrain');
 
-app.get('/api/bustrain', async (req, res) => {
-  try {
-    const bustrains = await bustrain.find();
-    res.json(bustrains);
-    console.log("mongo working fine!!");
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
 
 const hotel = require('./backend-api/model/hotel');
  
@@ -150,19 +135,6 @@ app.get('/api/train', async (req, res) => {
 } 
 );
 
-const vietnamCityStructure = require('./backend-api/model/vietnamCityStructure');
-
-app.get('/api/vietnamCityStructure', async (req, res) => {
-  try {
-    const vietnamCityStructures = await vietnamCityStructure.find();
-    res.json(vietnamCityStructures);
-    console.log("mongo working fine!!");
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-}
-);
 
 const globalCityStructure = require('./backend-api/model/GlobalCityStructure');
 

@@ -1,7 +1,7 @@
 {
   "name": "travaura",
   "version": "1.0.0",
-  "description": "api with dummy data",
+  "description": "api for travaura",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -21,7 +21,8 @@
   },
   "devDependencies": {
     
-    "tailwindcss": "^3.3.5"
+    "tailwindcss": "^3.3.5",
+    
   },
   "engines": {
     "node": ">=15.0.0"
