@@ -3,13 +3,17 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const app = express();
+
 require('dotenv').config();
 const bodyParser = require('body-parser');
 
 
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '5mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+
+
+
 
 
 
@@ -37,6 +41,8 @@ app.get('/api/data', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
 
 const transfer = require('./backend-api/model/transfer');
 
@@ -89,29 +95,7 @@ app.get('/api/hotel', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-// app.post('/api/hotel', async (req, res) => {
-//   const hoteldata = new hotel({
-//     _id: new mongoose.Types.ObjectId(),
-//     Region: req.body.Region,
-//     City: req.body.City,
-//     Category: req.body.Category,
-//     Name: req.body.Name,
-//     RoomType: req.body.RoomType,
-//     MAPRoomPrice: req.body.MAPRoomPrice,
-//     CPRoomPrice: req.body.CPRoomPrice,
-//     EPRoomPrice: req.body.EPRoomPrice,
-//     PriceType: req.body.PriceType,
-//     Rating: req.body.Rating
-//   });
   
-//   try {
-//     console.log(req.body);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
 
 app.post('/api/hotel', async (req, res) => {
   try {
@@ -126,7 +110,9 @@ app.post('/api/hotel', async (req, res) => {
       CPRoomPrice: req.body.CPRoomPrice,
       EPRoomPrice: req.body.EPRoomPrice,
       PriceType: req.body.PriceType,
-      Rating: req.body.Rating
+      Rating: req.body.Rating,
+      Image: req.body.Image
+
     });
     await hoteldata.save();
     res.send(hoteldata);

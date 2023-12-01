@@ -11,7 +11,8 @@ const hotelSchema = new mongoose.Schema({
   CPRoomPrice: Number,
   EPRoomPrice: Number,
   PriceType: String,
-  Rating: Number
+  Rating: Number,
+  Image: [String]
 });
 
 
