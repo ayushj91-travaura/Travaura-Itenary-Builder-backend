@@ -123,7 +123,32 @@ app.post('/api/hotel', async (req, res) => {
   }
 });
 
+const bus = require('./backend-api/model/bus');
 
+app.get('/api/bus', async (req, res) => {
+  try {
+    const buses = await bus.find();
+    res.json(buses);
+    console.log("mongo working fine!!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+const train = require('./backend-api/model/train');
+
+app.get('/api/train', async (req, res) => {
+  try {
+    const trains = await train.find();
+    res.json(trains);
+    console.log("mongo working fine!!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+} 
+);
 
 const vietnamCityStructure = require('./backend-api/model/vietnamCityStructure');
 
