@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 
 
 app.use(cors());
-app.use(bodyParser.json({ limit: '5mb' }));
+app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 
