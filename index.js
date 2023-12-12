@@ -5,6 +5,7 @@ const path = require('path');
 const app = express();
 const puppeteer = require('puppeteer-core');
 const chromium = require('chrome-aws-lambda');
+const FormData = require('form-data');
 require('dotenv').config();
 
 const bodyParser = require('body-parser');
@@ -48,11 +49,11 @@ async function deleteImagesFromCloudinary(publicIds) {
   });
 
   await Promise.all(promises);
-}
+} 
 
 
 app.post('/generate-pdf', async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*'); // Consider specifying exact origins in production
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000/'); // Consider specifying exact origins in production
   let browser = null;
 
   try {
@@ -227,15 +228,3 @@ app.listen(PORT, () => {
   
 });
 
-
-// /_id: mongoose.Schema.Types.ObjectId,
-// Region: String,
-// City: String,
-// Category: String,
-// Name: String,
-// RoomType: String,
-// MAPRoomPrice: Number,
-// CPRoomPrice: Number,
-// EPRoomPrice: Number,
-// PriceType: String,
-// Rating: Number
