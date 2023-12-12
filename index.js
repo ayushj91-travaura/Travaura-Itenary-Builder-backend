@@ -30,9 +30,43 @@ app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
       console.error(err);
     });
 
+    // This should be a server-side function
+async function deleteImagesFromCloudinary(publicIds) {
+  const url = 'https://api.cloudinary.com/v1_1/dxcq5zluj/resources/image/upload/destroy';
+  const promises = publicIds.map(publicId => {
+      const formData = new FormData();
+      formData.append('public_id', publicId);
+
+      return fetch(url, {
+          method: 'POST',
+          headers: {
+              'Authorization': '283217643636457' // Keep this secure
+          },
+          body: formData
+      });
+  });
+
+  await Promise.all(promises);
+}
+
+
+app.post('/delete-cloudinary-images', async (req, res) => {
+  try {
+      const publicIds = req.body.publicIds;
+      await deleteImagesFromCloudinary(publicIds);
+      res.json({ message: 'Images deleted successfully' });
+  } catch (error) {
+      console.error('Error deleting images:', error);
+      res.status(500).send('Error deleting images');
+  }
+});
+
     
     app.post('/generate-pdf', async (req, res) => {
-      const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch({
+        headless: "new" // Opt-in to the new headless mode
+        // Other options...
+      });
 
       const page = await browser.newPage();
     
