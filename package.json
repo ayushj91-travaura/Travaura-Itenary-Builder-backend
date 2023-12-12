@@ -18,7 +18,8 @@
     "form-data": "^4.0.0",
     "mongoos": "^0.0.1-security",
     "mongoose": "^6.10.0",
-    "puppeteer": "^21.6.0"
+    "puppeteer": "^21.6.0",
+    "zlib": "^1.0.5"
   },
   "devDependencies": {
     "tailwindcss": "^3.3.5"

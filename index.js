@@ -13,6 +13,8 @@ app.use(cors({
 }));
 
 require('dotenv').config();
+const zlib = require('zlib');
+
 
 const bodyParser = require('body-parser');
 // app.use(express.json());
@@ -58,12 +60,21 @@ async function deleteImagesFromCloudinary(publicIds) {
 } 
 
 
-app.post('/generate-pdf', async (req, res) => {
-  console.log("api called")
-  header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
-  let browser = null;
+app.post('/generate-pdf', express.raw({ type: 'application/octet-stream' }), async (req, res) => {
+  console.log("api called");
+
+  // Decompress the data
+  zlib.inflate(req.body, async (err, buffer) => {
+    if (err) {
+      console.error('Error decompressing:', err);
+      res.status(500).send('Error decompressing data');
+      return;
+    }
+
+    // Convert buffer to string assuming it's an HTML string
+    const htmlContent = buffer.toString();
+    let browser = null;
+
 
   try {
     browser = await chromium.puppeteer.launch({
@@ -100,6 +111,7 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
       await browser.close();
     }
   }
+});
 });
 
 
