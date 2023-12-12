@@ -51,75 +51,47 @@ async function deleteImagesFromCloudinary(publicIds) {
 }
 
 
-app.post('/delete-cloudinary-images', async (req, res) => {
+app.post('/generate-pdf', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Consider specifying exact origins in production
+  let browser = null;
+
   try {
-      const publicIds = req.body.publicIds;
-      await deleteImagesFromCloudinary(publicIds);
-      res.json({ message: 'Images deleted successfully' });
+    browser = await chromium.puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
+    });
+
+    const page = await browser.newPage();
+    await page.setContent(req.body.html, { waitUntil: 'networkidle0' });
+
+    const height = await page.evaluate(() => {
+      return Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight
+      );
+    });
+
+    await page.setViewport({ width: 1350, height });
+    const pdf = await page.pdf({
+      width: '1350px',
+      height: `${height}px`,
+      printBackground: true
+    });
+
+    res.contentType('application/pdf');
+    res.send(pdf);
   } catch (error) {
-      console.error('Error deleting images:', error);
-      res.status(500).send('Error deleting images');
+    console.error('Error generating PDF:', error);
+    res.status(500).send('Error generating PDF');
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
   }
 });
-
-    
-    app.post('/generate-pdf', async (req, res) => {
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
-
-      let browser = null;
-
-      try {
-        // Launch a headless browser using chrome-aws-lambda
-        browser = await chromium.puppeteer.launch({
-          args: chromium.args,
-          defaultViewport: chromium.defaultViewport,
-          executablePath: await chromium.executablePath,
-          headless: chromium.headless,
-        });
-
-      const page = await browser.newPage();
-    
-      // Set content and wait for page to load all resources
-      await page.setContent(req.body.html, { waitUntil: 'networkidle0' });
-    
-      // Evaluate the height of the content on the page
-      const height = await page.evaluate(() => {
-        return Math.max(
-          document.body.scrollHeight,
-          document.body.offsetHeight,
-          document.documentElement.clientHeight,
-          document.documentElement.scrollHeight,
-          document.documentElement.offsetHeight
-        );
-      });
-    
-      // Set the viewport to A4 width and calculated height
-      await page.setViewport({ width: 1350, height });
-    
-      // Generate the PDF with custom dimensions
-      const pdf = await page.pdf({
-        width: '1350px',
-        height: `${height}px`,
-        printBackground: true
-      });
-    
-      await browser.close();
-      res.contentType('application/pdf');
-      res.send(pdf);
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-      res.status(500).send('Error generating PDF');
-    } finally {
-      // Close the browser safely
-      if (browser !== null) {
-        await browser.close();
-      }
-    }
-  });
-    
-    
+ 
     
 
 const data = require('./backend-api/model/data');
