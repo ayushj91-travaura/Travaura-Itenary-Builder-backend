@@ -6,12 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
-    
   },
   "author": "Ayush Jha",
   "license": "ISC",
   "dependencies": {
-   
+    
     "body-parser": "^1.20.2",
     "chrome-aws-lambda": "^10.1.0",
     "cors": "^2.8.5",
