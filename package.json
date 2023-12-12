@@ -4,8 +4,9 @@
   "description": "api with dummy data",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-    
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+   
   },
   "author": "Ayush Jha",
   "license": "ISC",
@@ -22,9 +23,8 @@
     "puppeteer": "^21.6.0"
   },
   "devDependencies": {
-    
+   
     "tailwindcss": "^3.3.5"
-  
   },
   "engines": {
     "node": ">=15.0.0"
