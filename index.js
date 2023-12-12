@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const app = express();
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 const chromium = require('chrome-aws-lambda');
 require('dotenv').config();
 
@@ -67,7 +67,7 @@ app.post('/delete-cloudinary-images', async (req, res) => {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
-      
+
       let browser = null;
 
       try {
