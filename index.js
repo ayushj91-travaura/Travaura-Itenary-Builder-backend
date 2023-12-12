@@ -3,14 +3,16 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const app = express();
-
+const puppeteer = require('puppeteer');
 require('dotenv').config();
-const bodyParser = require('body-parser');
 
+const bodyParser = require('body-parser');
+// app.use(express.json());
 
 app.use(cors());
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
 
 
   const mongoAtlasDB ='mongodb+srv://travauratech:travauratech@cluster0.zqfkwop.mongodb.net/' ;
@@ -24,6 +26,42 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
     .catch((err) => {
       console.error(err);
     });
+
+    
+    app.post('/generate-pdf', async (req, res) => {
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+    
+      // Set content and wait for page to load all resources
+      await page.setContent(req.body.html, { waitUntil: 'networkidle0' });
+    
+      // Evaluate the height of the content on the page
+      const height = await page.evaluate(() => {
+        return Math.max(
+          document.body.scrollHeight,
+          document.body.offsetHeight,
+          document.documentElement.clientHeight,
+          document.documentElement.scrollHeight,
+          document.documentElement.offsetHeight
+        );
+      });
+    
+      // Set the viewport to A4 width and calculated height
+      await page.setViewport({ width: 1350, height });
+    
+      // Generate the PDF with custom dimensions
+      const pdf = await page.pdf({
+        width: '1350px',
+        height: `${height}px`,
+        printBackground: true
+      });
+    
+      await browser.close();
+      res.contentType('application/pdf');
+      res.send(pdf);
+    });
+    
+    
 
 const data = require('./backend-api/model/data');
 
