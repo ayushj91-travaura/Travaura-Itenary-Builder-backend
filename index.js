@@ -12,6 +12,11 @@ app.use(cors());
 //   methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
 // }));
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
 require('dotenv').config();
 const zlib = require('zlib');
 
