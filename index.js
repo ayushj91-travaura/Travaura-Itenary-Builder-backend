@@ -6,6 +6,7 @@ const app = express();
 const puppeteer = require('puppeteer-core');
 const chromium = require('chrome-aws-lambda');
 const FormData = require('form-data');
+const { webkit } = require('playwright');
 require('dotenv').config();
 
 const bodyParser = require('body-parser');
@@ -90,6 +91,51 @@ app.post('/generate-pdf', async (req, res) => {
     if (browser) {
       await browser.close();
     }
+  }
+});
+
+// app.post('/generate-pdf', async (req, res) => {
+//   let browser = null;
+
+//   try {
+//     // Launch the browser with Playwright
+//     browser = await chromium.launch(); // Use 'chromium.launch()' or 'firefox.launch()' as needed
+
+//     // Create a new page
+//     const page = await browser.newPage();
+
+//     // Set the content of the page
+//     await page.setContent(req.body.html, { waitUntil: 'networkidle' });
+
+//     // Generate the PDF from the page content
+//     const pdfBuffer = await page.pdf({
+//       format: 'A4',
+//       printBackground: true
+//     });
+
+//     // Set the content type to application/pdf
+//     res.contentType('application/pdf');
+
+//     // Send the PDF buffer as a response
+//     res.send(pdfBuffer);
+//   } catch (error) {
+//     console.error('Error generating PDF:', error);
+//     res.status(500).send('Error generating PDF');
+//   } finally {
+//     // Close the browser
+//     if (browser) {
+//       await browser.close();
+//     }
+//   }
+// });
+
+app.post('/delete-cloudinary-images', async (req, res) => {
+  try {
+      await deleteImagesFromCloudinary(req.body.publicIds);
+      res.send('Images deleted successfully');
+  } catch (error) {
+      console.error('Error deleting images:', error);
+      res.status(500).send('Error deleting images');
   }
 });
  
