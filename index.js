@@ -40,7 +40,7 @@ async function deleteImagesFromCloudinary(publicIds) {
       return fetch(url, {
           method: 'POST',
           headers: {
-              'Authorization': '283217643636457' // Keep this secure
+              'Authorization': process.env.CLOUDINARYAPIKEY
           },
           body: formData
       });
