@@ -64,6 +64,7 @@ app.post('/delete-cloudinary-images', async (req, res) => {
 
     
     app.post('/generate-pdf', async (req, res) => {
+      res.setHeader('Access-Control-Allow-Origin', '*');
       let browser = null;
 
       try {
