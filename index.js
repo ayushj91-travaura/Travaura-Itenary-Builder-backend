@@ -5,6 +5,8 @@ const path = require('path');
 const app = express();
 const puppeteer = require('puppeteer-core');
 const chromium = require('chrome-aws-lambda');
+const multer = require('multer');
+const upload = multer();
 const FormData = require('form-data');
 app.use(cors());
 
@@ -54,31 +56,21 @@ async function deleteImagesFromCloudinary(publicIds) {
 } 
 
 
-app.post('/generate-pdf', express.raw({ type: 'application/octet-stream' }), async (req, res) => {
-  console.log("API called");
-  const payloadSize = req.body.length; // Payload size in bytes
-  console.log(`Payload size: ${payloadSize} bytes`);
+app.post('/generate-pdf', upload.none(), async (req, res) => {
+  let browser = null;
 
-  zlib.inflate(req.body, async (err, buffer) => {
-    if (err) {
-      console.error('Error decompressing:', err);
-      res.status(500).send('Error decompressing data');
-      return;
-    }
+  try {
+    browser = await chromium.puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
+    });
 
-    const htmlContent = buffer.toString(); // Convert buffer to string
-    let browser = null;
+    const page = await browser.newPage();
 
-    try {
-      browser = await chromium.puppeteer.launch({
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath,
-        headless: chromium.headless,
-      });
-
-      const page = await browser.newPage();
-      await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+    // req.body.html will now contain your HTML content
+    await page.setContent(req.body.html, { waitUntil: 'networkidle0' });
 
     const height = await page.evaluate(() => {
       return Math.max(
@@ -105,7 +97,9 @@ app.post('/generate-pdf', express.raw({ type: 'application/octet-stream' }), asy
     }
   }
 });
-});
+
+
+
 
 
 app.post('/delete-cloudinary-images', async (req, res) => {
