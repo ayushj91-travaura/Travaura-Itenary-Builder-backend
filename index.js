@@ -32,7 +32,8 @@ app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 
     
     app.post('/generate-pdf', async (req, res) => {
-      const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+
       const page = await browser.newPage();
     
       // Set content and wait for page to load all resources
