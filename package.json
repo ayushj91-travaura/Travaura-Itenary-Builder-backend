@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx puppeteer browser install chrome & node index.js"
+    "start": "cd ./node_modules/puppeteer && npm install && cd ../.. && node index.js"
   },
   "author": "Ayush Jha",
   "license": "ISC",
