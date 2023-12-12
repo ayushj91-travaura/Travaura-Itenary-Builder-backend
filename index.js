@@ -7,10 +7,10 @@ const puppeteer = require('puppeteer-core');
 const chromium = require('chrome-aws-lambda');
 const FormData = require('form-data');
 app.use(cors());
-app.use(cors({
-  origin: 'https://travaura-itinerary-builder-frontend.vercel.app',
-  methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
-}));
+// app.use(cors({
+//   origin: 'https://travaura-itinerary-builder-frontend.vercel.app',
+//   methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
+// }));
 
 require('dotenv').config();
 const zlib = require('zlib');
