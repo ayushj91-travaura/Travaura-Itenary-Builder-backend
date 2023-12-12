@@ -17,7 +17,7 @@ app.use((err, req, res, next) => {
 });
 
 require('dotenv').config();
-const zlib = require('zlib');
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '100mb' })); 
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
@@ -69,7 +69,6 @@ app.post('/generate-pdf', upload.none(), async (req, res) => {
 
     const page = await browser.newPage();
 
-    // req.body.html will now contain your HTML content
     await page.setContent(req.body.html, { waitUntil: 'networkidle0' });
 
     const height = await page.evaluate(() => {
@@ -89,7 +88,7 @@ app.post('/generate-pdf', upload.none(), async (req, res) => {
     res.contentType('application/pdf');
     res.send(pdf);
   } catch (error) {
-    console.error('Error generating PDF:', error.response.data);
+    console.error('Error generating PDF:', error);
     res.status(500).send('Error generating PDF');
   } finally {
     if (browser) {
