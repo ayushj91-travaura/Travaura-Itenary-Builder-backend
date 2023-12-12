@@ -6,7 +6,12 @@ const app = express();
 const puppeteer = require('puppeteer-core');
 const chromium = require('chrome-aws-lambda');
 const FormData = require('form-data');
-const { webkit } = require('playwright');
+app.use(cors());
+app.use(cors({
+  origin: 'https://travaura-itinerary-builder-frontend.vercel.app',
+  methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
+}));
+
 require('dotenv').config();
 
 const bodyParser = require('body-parser');
@@ -14,7 +19,7 @@ const bodyParser = require('body-parser');
 
 
 
-app.use(cors());
+
 
 app.use(bodyParser.json({ limit: '100mb' })); 
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
@@ -97,40 +102,6 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
   }
 });
 
-// app.post('/generate-pdf', async (req, res) => {
-//   let browser = null;
-
-//   try {
-//     // Launch the browser with Playwright
-//     browser = await chromium.launch(); // Use 'chromium.launch()' or 'firefox.launch()' as needed
-
-//     // Create a new page
-//     const page = await browser.newPage();
-
-//     // Set the content of the page
-//     await page.setContent(req.body.html, { waitUntil: 'networkidle' });
-
-//     // Generate the PDF from the page content
-//     const pdfBuffer = await page.pdf({
-//       format: 'A4',
-//       printBackground: true
-//     });
-
-//     // Set the content type to application/pdf
-//     res.contentType('application/pdf');
-
-//     // Send the PDF buffer as a response
-//     res.send(pdfBuffer);
-//   } catch (error) {
-//     console.error('Error generating PDF:', error);
-//     res.status(500).send('Error generating PDF');
-//   } finally {
-//     // Close the browser
-//     if (browser) {
-//       await browser.close();
-//     }
-//   }
-// });
 
 app.post('/delete-cloudinary-images', async (req, res) => {
   try {
@@ -142,7 +113,6 @@ app.post('/delete-cloudinary-images', async (req, res) => {
   }
 });
  
-    
 
 const data = require('./backend-api/model/data');
 
