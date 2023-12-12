@@ -10,7 +10,6 @@
   "author": "Ayush Jha",
   "license": "ISC",
   "dependencies": {
-    
     "body-parser": "^1.20.2",
     "chrome-aws-lambda": "^10.1.0",
     "cors": "^2.8.5",
@@ -18,12 +17,11 @@
     "express": "^4.18.2",
     "mongoos": "^0.0.1-security",
     "mongoose": "^6.10.0",
-    "puppeteer": "^21.6.0"
+    "puppeteer": "^21.6.0",
+    "puppeteer-core": "^10.4.0"
   },
   "devDependencies": {
-    
     "tailwindcss": "^3.3.5"
-    
   },
   "engines": {
     "node": ">=15.0.0"
