@@ -56,7 +56,7 @@ async function deleteImagesFromCloudinary(publicIds) {
 } 
 
 
-app.post('/generate-pdf', upload.none(), async (req, res) => {
+app.post('/generate-pdf', async (req, res) => {
   let browser = null;
 
   try {
