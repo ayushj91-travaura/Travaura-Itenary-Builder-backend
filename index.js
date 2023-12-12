@@ -67,7 +67,8 @@ async function deleteImagesFromCloudinary(publicIds) {
 
 app.post('/generate-pdf', express.raw({ type: 'application/octet-stream' }), async (req, res) => {
   console.log("api called");
-
+  const payloadSize = req.body.length; // This gives you the size in bytes
+  console.log(`Payload size: ${payloadSize} bytes`);
   // Decompress the data
   zlib.inflate(req.body, async (err, buffer) => {
     if (err) {
