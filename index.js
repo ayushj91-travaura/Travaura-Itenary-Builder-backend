@@ -7,10 +7,7 @@ const puppeteer = require('puppeteer-core');
 const chromium = require('chrome-aws-lambda');
 const FormData = require('form-data');
 app.use(cors());
-// app.use(cors({
-//   origin: 'https://travaura-itinerary-builder-frontend.vercel.app',
-//   methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
-// }));
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -19,15 +16,7 @@ app.use((err, req, res, next) => {
 
 require('dotenv').config();
 const zlib = require('zlib');
-
-
 const bodyParser = require('body-parser');
-// app.use(express.json());
-
-
-
-
-
 app.use(bodyParser.json({ limit: '100mb' })); 
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 
@@ -66,10 +55,10 @@ async function deleteImagesFromCloudinary(publicIds) {
 
 
 app.post('/generate-pdf', express.raw({ type: 'application/octet-stream' }), async (req, res) => {
-  console.log("api called");
-  const payloadSize = req.body.length; // This gives you the size in bytes
+  console.log("API called");
+  const payloadSize = req.body.length; // Payload size in bytes
   console.log(`Payload size: ${payloadSize} bytes`);
-  // Decompress the data
+
   zlib.inflate(req.body, async (err, buffer) => {
     if (err) {
       console.error('Error decompressing:', err);
@@ -77,21 +66,19 @@ app.post('/generate-pdf', express.raw({ type: 'application/octet-stream' }), asy
       return;
     }
 
-    // Convert buffer to string assuming it's an HTML string
-    const htmlContent = buffer.toString();
+    const htmlContent = buffer.toString(); // Convert buffer to string
     let browser = null;
 
+    try {
+      browser = await chromium.puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath,
+        headless: chromium.headless,
+      });
 
-  try {
-    browser = await chromium.puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath,
-      headless: chromium.headless,
-    });
-
-    const page = await browser.newPage();
-    await page.setContent(req.body.html, { waitUntil: 'networkidle0' });
+      const page = await browser.newPage();
+      await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
 
     const height = await page.evaluate(() => {
       return Math.max(
