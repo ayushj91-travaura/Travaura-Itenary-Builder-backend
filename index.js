@@ -109,7 +109,7 @@ app.post('/generate-pdf', express.raw({ type: 'application/octet-stream' }), asy
     res.contentType('application/pdf');
     res.send(pdf);
   } catch (error) {
-    console.error('Error generating PDF:', error.response ? error.response.data : error);
+    console.error('Error generating PDF:', error.response.data);
     res.status(500).send('Error generating PDF');
   } finally {
     if (browser) {
