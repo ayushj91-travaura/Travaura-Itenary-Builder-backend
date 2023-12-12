@@ -14,8 +14,10 @@ const bodyParser = require('body-parser');
 
 
 
-app.use(cors());
-
+app.use(cors({
+  origin:['https://travaura-itenary-builder-frontend.vercel.app','https://travaura-itenary-builder-frontend.vercel.app'],
+  credentials:true
+}));
 app.use(bodyParser.json({ limit: '100mb' })); 
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 
@@ -54,6 +56,7 @@ async function deleteImagesFromCloudinary(publicIds) {
 
 
 app.post('/generate-pdf', async (req, res) => {
+  console.log("api called")
   res.header('Access-Control-Allow-Credentials', true);
   let browser = null;
 
