@@ -53,7 +53,7 @@ async function deleteImagesFromCloudinary(publicIds) {
 
 
 app.post('/generate-pdf', async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000/'); // Consider specifying exact origins in production
+  res.header('Access-Control-Allow-Credentials', true);
   let browser = null;
 
   try {
