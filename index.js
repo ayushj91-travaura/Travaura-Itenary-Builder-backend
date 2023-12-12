@@ -83,7 +83,7 @@ app.post('/generate-pdf', async (req, res) => {
     res.contentType('application/pdf');
     res.send(pdf);
   } catch (error) {
-    console.error('Error generating PDF:', error);
+    console.error('Error generating PDF:', error.response ? error.response.data : error);
     res.status(500).send('Error generating PDF');
   } finally {
     if (browser) {
