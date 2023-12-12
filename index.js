@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const app = express();
 const puppeteer = require('puppeteer');
+const chromium = require('chrome-aws-lambda');
 require('dotenv').config();
 
 const bodyParser = require('body-parser');
@@ -63,10 +64,16 @@ app.post('/delete-cloudinary-images', async (req, res) => {
 
     
     app.post('/generate-pdf', async (req, res) => {
-      const browser = await puppeteer.launch({
-        headless: "new" // Opt-in to the new headless mode
-        // Other options...
-      });
+      let browser = null;
+
+      try {
+        // Launch a headless browser using chrome-aws-lambda
+        browser = await chromium.puppeteer.launch({
+          args: chromium.args,
+          defaultViewport: chromium.defaultViewport,
+          executablePath: await chromium.executablePath,
+          headless: chromium.headless,
+        });
 
       const page = await browser.newPage();
     
@@ -97,7 +104,17 @@ app.post('/delete-cloudinary-images', async (req, res) => {
       await browser.close();
       res.contentType('application/pdf');
       res.send(pdf);
-    });
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      res.status(500).send('Error generating PDF');
+    } finally {
+      // Close the browser safely
+      if (browser !== null) {
+        await browser.close();
+      }
+    }
+  });
+    
     
     
 
