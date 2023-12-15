@@ -37,6 +37,7 @@ const DayDomesticFlightsSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
+    _id: String,
     travellerDetails: TravelerDetailsSchema,
     country: String,
     selectedActivities: [DayActivitiesSchema],

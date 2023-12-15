@@ -250,6 +250,7 @@ const user = require('./backend-api/model/ResultPageModels/Users');
 app.post('/api/user', async (req, res) => {
   try {
     const userdata = new user({
+      _id: req.body.id,
       travellerDetails: req.body.travellerDetails,
       country: req.body.country,
       selectedActivities: req.body.selectedActivities,
