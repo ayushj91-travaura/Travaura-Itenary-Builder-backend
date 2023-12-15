@@ -34,7 +34,7 @@ const addonsSchema = new mongoose.Schema({
   },
   visa: {
     type: String,
-    enum: ['Included', 'Excluded', 'Visa on Arrival', 'Visa Free Destination', 'Not Required in this Itinerary'],
+    
     default: ''
   },
   peakSeasonMarkup: {
