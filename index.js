@@ -36,80 +36,81 @@ app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
       console.error(err);
     });
 
-    // This should be a server-side function
-async function deleteImagesFromCloudinary(publicIds) {
-  const url = 'https://api.cloudinary.com/v1_1/dxcq5zluj/resources/image/upload/destroy';
-  const promises = publicIds.map(publicId => {
-      const formData = new FormData();
-      formData.append('public_id', publicId);
+//     // This should be a server-side function
+// async function deleteImagesFromCloudinary(publicIds) {
+//   const url = 'https://api.cloudinary.com/v1_1/dxcq5zluj/resources/image/upload/destroy';
+//   const promises = publicIds.map(publicId => {
+//       const formData = new FormData();
+//       formData.append('public_id', publicId);
 
-      return fetch(url, {
-          method: 'POST',
-          headers: {
-              'Authorization': process.env.CLOUDINARYAPIKEY
-          },
-          body: formData
-      });
-  });
+//       return fetch(url, {
+//           method: 'POST',
+//           headers: {
+//               'Authorization': process.env.CLOUDINARYAPIKEY
+//           },
+//           body: formData
+//       });
+//   });
 
-  await Promise.all(promises);
-} 
-
-
-app.post('/generate-pdf', async (req, res) => {
-  let browser = null;
-
-  try {
-    browser = await chromium.puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath,
-      headless: chromium.headless,
-    });
-
-    const page = await browser.newPage();
-
-    await page.setContent(req.body.html, { waitUntil: 'networkidle0' });
-
-    const height = await page.evaluate(() => {
-      return Math.max(
-        document.body.scrollHeight,
-        document.documentElement.scrollHeight
-      );
-    });
-
-    await page.setViewport({ width: 1350, height });
-    const pdf = await page.pdf({
-      width: '1350px',
-      height: `${height}px`,
-      printBackground: true
-    });
-
-    res.contentType('application/pdf');
-    res.send(pdf);
-  } catch (error) {
-    console.error('Error generating PDF:', error);
-    res.status(500).send('Error generating PDF');
-  } finally {
-    if (browser) {
-      await browser.close();
-    }
-  }
-});
+//   await Promise.all(promises);
+// } 
 
 
+// app.post('/generate-pdf', async (req, res) => {
+//   let browser = null;
+
+//   try {
+//     browser = await chromium.puppeteer.launch({
+//       args: chromium.args,
+//       defaultViewport: chromium.defaultViewport,
+//       executablePath: await chromium.executablePath,
+//       headless: chromium.headless,
+//     });
+
+//     const page = await browser.newPage();
+
+//     await page.setContent(req.body.html, { waitUntil: 'networkidle0' });
+
+//     const height = await page.evaluate(() => {
+//       return Math.max(
+//         document.body.scrollHeight,
+//         document.documentElement.scrollHeight
+//       );
+//     });
+
+//     await page.setViewport({ width: 1350, height });
+//     const pdf = await page.pdf({
+//       width: '1350px',
+//       height: `${height}px`,
+//       printBackground: true,
+      
+//     });
+
+//     res.contentType('application/pdf');
+//     res.send(pdf);
+//   } catch (error) {
+//     console.error('Error generating PDF:', error);
+//     res.status(500).send('Error generating PDF');
+//   } finally {
+//     if (browser) {
+//       await browser.close();
+//     }
+//   }
+// });
 
 
 
-app.post('/delete-cloudinary-images', async (req, res) => {
-  try {
-      await deleteImagesFromCloudinary(req.body.publicIds);
-      res.send('Images deleted successfully');
-  } catch (error) {
-      console.error('Error deleting images:', error);
-      res.status(500).send('Error deleting images');
-  }
-});
+
+
+// app.post('/delete-cloudinary-images', async (req, res) => {
+//   try {
+//       await deleteImagesFromCloudinary(req.body.publicIds);
+//       res.send('Images deleted successfully');
+//   } catch (error) {
+//       console.error('Error deleting images:', error);
+//       res.status(500).send('Error deleting images');
+//   }
+// });
  
 
 const data = require('./backend-api/model/data');
@@ -237,6 +238,38 @@ app.get('/api/globalCityStructure', async (req, res) => {
 }
 );
 
+const domesticFlight = require('./backend-api/model/ResultPageModels/DomesticFlight');
+const internationalFlight = require('./backend-api/model/ResultPageModels/InternationalFlight');
+const activities = require('./backend-api/model/ResultPageModels/ActivitiesSchema');
+const addons = require('./backend-api/model/ResultPageModels/Addons');
+const travellersDetails = require('./backend-api/model/ResultPageModels/travellersDetails');
+const selectedHotel = require('./backend-api/model/ResultPageModels/SelectedHotel');
+const selectedTransfer = require('./backend-api/model/ResultPageModels/SelectedTransfers');
+const user = require('./backend-api/model/ResultPageModels/Users');
+
+app.post('/api/user', async (req, res) => {
+  try {
+    const userdata = new user({
+      travellerDetails: req.body.travellerDetails,
+      country: req.body.country,
+      selectedActivities: req.body.selectedActivities,
+      selectedHotels: req.body.selectedHotels,
+      selectedTransfers: req.body.selectedTransfers,
+      selectedDomesticFlights: req.body.selectedDomesticFlights,
+      selectedInternationalFlights: req.body.selectedInternationalFlights,
+      selectedAddons: req.body.selectedAddons,
+    });
+    await userdata.save();
+    res.send(userdata);
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
 
 const PORT = process.env.PORT || 5000;
 
@@ -244,4 +277,7 @@ app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
   
 });
+
+
+
 

@@ -1,4 +1,8 @@
 {
     "appService.defaultWebAppToDeploy": "undefined/subscriptions/2b3ccfbd-d893-4964-9b5d-81389742e850/resourceGroups/travaura-tech2/providers/Microsoft.Web/sites/travaura-tech",
-    "appService.deploySubpath": "."
+    "appService.deploySubpath": ".",
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ]
 }
