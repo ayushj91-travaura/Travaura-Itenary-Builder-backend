@@ -31,10 +31,7 @@ const DayTransfersSchema = new mongoose.Schema({
     transfer: SelectedTransferSchema
 });
 
-const DayDomesticFlightsSchema = new mongoose.Schema({
-    day: Number,
-    domesticFlights: DomesticFlightsSchema
-});
+
 
 const userSchema = new mongoose.Schema({
     _id: String,
@@ -43,7 +40,7 @@ const userSchema = new mongoose.Schema({
     selectedActivities: [DayActivitiesSchema],
     selectedHotels: [DayHotelsSchema],
     selectedTransfers: [DayTransfersSchema],
-    selectedDomesticFlights: [DayDomesticFlightsSchema],
+    selectedDomesticFlights: [DomesticFlightsSchema],
     selectedInternationalFlights: [InternationalFlightsSchema],
     selectedAddons: [AddonsSchema],
 });

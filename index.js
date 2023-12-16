@@ -269,6 +269,17 @@ app.post('/api/user', async (req, res) => {
   }
 });
 
+app.get('/api/user/:id', async (req, res) => {
+  try {
+    const userdata = await user.findById(req.params.id);
+    res.send(userdata);
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 
 
