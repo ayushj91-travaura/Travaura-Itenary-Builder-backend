@@ -23,17 +23,17 @@ const travelerDetailsSchema = new mongoose.Schema({
     },
     adults: {
         type: Number,
-        
+        default: 0,
         min: 0
     },
     child: {
         type: Number,
-        
+        default: 0,
         min: 0
     },
     infants: {
         type: Number,
-        
+        default: 0,
         min: 0
     },
     internationalFlights: {
@@ -50,12 +50,12 @@ const travelerDetailsSchema = new mongoose.Schema({
     },
     duration: {
         type: Number,
-       
+       default: 0,
         min: 0
     },
     nights: {
         type: Number,
-       
+       default: 0,
         min: 0
     }
 });
