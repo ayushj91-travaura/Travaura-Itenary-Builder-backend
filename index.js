@@ -113,7 +113,7 @@ app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 
 app.post('/generate-pdf', async (req, res) => {
   try {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
     const url = req.body.url;
