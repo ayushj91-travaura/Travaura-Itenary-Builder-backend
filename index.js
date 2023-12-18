@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const app = express();
-const puppeteer = require('puppeteer-core');
-const chromium = require('chrome-aws-lambda');
+const puppeteer = require('puppeteer');
 const multer = require('multer');
 const upload = multer();
 const FormData = require('form-data');
@@ -111,6 +110,45 @@ app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 //       res.status(500).send('Error deleting images');
 //   }
 // });
+
+app.post('/generate-pdf', async (req, res) => {
+  try {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    const url = req.body.url;
+
+    await page.goto(url, { waitUntil: 'networkidle0' });
+
+    // Set screen size and generate PDF
+    const height = await page.evaluate(() => Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight
+    ));
+    await page.setViewport({ width: 1080, height: height });
+
+    await page.waitForSelector('img');
+
+    const pdfPath = path.join(__dirname, 'resultPage.pdf');
+    await page.pdf({
+      width: '1350px',
+      height: `${height}px`,
+      path: pdfPath,
+      printBackground: true
+    });
+
+    console.log('PDF generated!');
+    await browser.close();
+
+    // Send the PDF as a response
+    res.download(pdfPath);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Error generating PDF');
+  }
+});
+
+
  
 
 const data = require('./backend-api/model/data');
