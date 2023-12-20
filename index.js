@@ -1,4 +1,5 @@
 const express = require('express');
+const router = express.Router();
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
@@ -35,81 +36,6 @@ app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
       console.error(err);
     });
 
-//     // This should be a server-side function
-// async function deleteImagesFromCloudinary(publicIds) {
-//   const url = 'https://api.cloudinary.com/v1_1/dxcq5zluj/resources/image/upload/destroy';
-//   const promises = publicIds.map(publicId => {
-//       const formData = new FormData();
-//       formData.append('public_id', publicId);
-
-//       return fetch(url, {
-//           method: 'POST',
-//           headers: {
-//               'Authorization': process.env.CLOUDINARYAPIKEY
-//           },
-//           body: formData
-//       });
-//   });
-
-//   await Promise.all(promises);
-// } 
-
-
-// app.post('/generate-pdf', async (req, res) => {
-//   let browser = null;
-
-//   try {
-//     browser = await chromium.puppeteer.launch({
-//       args: chromium.args,
-//       defaultViewport: chromium.defaultViewport,
-//       executablePath: await chromium.executablePath,
-//       headless: chromium.headless,
-//     });
-
-//     const page = await browser.newPage();
-
-//     await page.setContent(req.body.html, { waitUntil: 'networkidle0' });
-
-//     const height = await page.evaluate(() => {
-//       return Math.max(
-//         document.body.scrollHeight,
-//         document.documentElement.scrollHeight
-//       );
-//     });
-
-//     await page.setViewport({ width: 1350, height });
-//     const pdf = await page.pdf({
-//       width: '1350px',
-//       height: `${height}px`,
-//       printBackground: true,
-      
-//     });
-
-//     res.contentType('application/pdf');
-//     res.send(pdf);
-//   } catch (error) {
-//     console.error('Error generating PDF:', error);
-//     res.status(500).send('Error generating PDF');
-//   } finally {
-//     if (browser) {
-//       await browser.close();
-//     }
-//   }
-// });
-
-
-
-
-
-// app.post('/delete-cloudinary-images', async (req, res) => {
-//   try {
-//       await deleteImagesFromCloudinary(req.body.publicIds);
-//       res.send('Images deleted successfully');
-//   } catch (error) {
-//       console.error('Error deleting images:', error);
-//       res.status(500).send('Error deleting images');
-//   }
-// });
 
 app.post('/generate-pdf', async (req, res) => {
   try {
@@ -317,6 +243,28 @@ app.get('/api/user/:id', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+app.put('/updateActivity/:id', async (req, res) => {
+  const { id } = req.params;
+  const { day, selectedActivity } = req.body;
+
+  try {
+    const updatedDocument = await user.findByIdAndUpdate(id, {
+      $set: {
+        "selectedActivities.$[elem].Activities": selectedActivity
+      }
+    }, {
+      arrayFilters: [{ "elem.day": day }],
+      new: true
+    });
+
+    res.json(updatedDocument);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 
 
 
