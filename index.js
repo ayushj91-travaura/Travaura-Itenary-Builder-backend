@@ -132,6 +132,27 @@ app.get('/api/hotel', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+app.put('/api/updateHotel/:id', async (req, res) => {
+  const { id } = req.params;
+  const { day, selectedHotel } = req.body;
+
+  try {
+    const updatedDocument = await user.findByIdAndUpdate(id, {
+      $set: {
+        "selectedHotels.$[elem].Hotel": selectedHotel
+      }
+    }, {
+      arrayFilters: [{ "elem.day": day }],
+      new: true
+    });
+
+    res.json(updatedDocument);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+);
   
 
 app.post('/api/hotel', async (req, res) => {
