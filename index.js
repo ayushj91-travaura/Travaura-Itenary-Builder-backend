@@ -140,7 +140,7 @@ app.put('/api/updateHotel/:id', async (req, res) => {
   try {
     const updatedDocument = await user.findByIdAndUpdate(id, {
       $set: {
-        "selectedHotels.$[elem].Hotel": selectedHotel
+        "selectedHotels.$[elem].selectedHotel": selectedHotel
       }
     }, {
       arrayFilters: [{ "elem.day": day }],
