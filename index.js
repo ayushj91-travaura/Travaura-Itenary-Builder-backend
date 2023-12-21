@@ -286,6 +286,25 @@ app.put('/updateActivity/:id', async (req, res) => {
   }
 });
 
+app.delete('/deleteActivity/:id', async (req, res) => {
+  const { id } = req.params;
+  const { day, selectedActivity } = req.body;
+
+  try {
+    const updatedDocument = await user.findByIdAndUpdate(id, {
+      $pull: {
+        "selectedActivities": { "day": day, "Activities": selectedActivity }
+      }
+    }, {
+      new: true
+    });
+
+    res.json(updatedDocument);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 
 
 
