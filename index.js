@@ -288,17 +288,17 @@ app.put('/updateActivity/:id', async (req, res) => {
   }
 });
 
-app.put('/addActivity/:id', async (req, res) => {
+app.post('/addActivity/:id', async (req, res) => {
   const { id } = req.params;
   const { day, selectedActivity } = req.body;
 
   try {
     const updatedDocument = await user.findByIdAndUpdate(id, {
       $push: {
-        "selectedActivities.$[elem].Activities": selectedActivity
+        "selectedActivities": { "day": day, "Activities": selectedActivity }
       }
     }, {
-      arrayFilters: [{ "elem.day": day }],
+      
       new: true
     });
 
