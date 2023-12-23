@@ -288,6 +288,26 @@ app.put('/updateActivity/:id', async (req, res) => {
   }
 });
 
+app.put('/addActivity/:id', async (req, res) => {
+  const { id } = req.params;
+  const { day, selectedActivity } = req.body;
+
+  try {
+    const updatedDocument = await user.findByIdAndUpdate(id, {
+      $push: {
+        "selectedActivities.$[elem].Activities": selectedActivity
+      }
+    }, {
+      arrayFilters: [{ "elem.day": day }],
+      new: true
+    });
+
+    res.json(updatedDocument);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 app.delete('/deleteActivity/:id', async (req, res) => {
   const { id } = req.params;
   const { day, selectedActivity } = req.body;
