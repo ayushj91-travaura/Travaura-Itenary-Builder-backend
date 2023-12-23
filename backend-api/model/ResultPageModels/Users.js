@@ -6,6 +6,8 @@ const AddonsSchema = require('./Addons.js').schema;
 const TravelerDetailsSchema = require('./travellersDetails.js').schema;  
 const SelectedHotelSchema = require('./SelectedHotel.js').schema;  
 const SelectedTransferSchema = require('./SelectedTransfers.js').schema;
+const busSchema = require('./busSchema.js').schema;
+const trainSchema = require('./trainSchema.js').schema;
 
 const DayActivitiesSchema = new mongoose.Schema({
     day: Number,
@@ -43,6 +45,8 @@ const userSchema = new mongoose.Schema({
     selectedDomesticFlights: [DomesticFlightsSchema],
     selectedInternationalFlights: [InternationalFlightsSchema],
     selectedAddons: [AddonsSchema],
+    selectedBuses: [busSchema],
+    selectedTrains: [trainSchema]
 });
 
 const User = mongoose.model('User', userSchema);
