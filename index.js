@@ -135,14 +135,14 @@ app.get('/api/hotel', async (req, res) => {
 
 app.put('/api/updateHotel/:id', async (req, res) => {
   const { id } = req.params;
-  const { day, selectedHotel, numberOfRooms, numberOfSupplements } = req.body;
+  const { day, selectedHotel, numberOfRooms, numberofSupplements } = req.body;
 
   try {
     const updatedDocument = await user.findByIdAndUpdate(id, {
       $set: {
         "selectedHotels.$[elem].selectedHotel": selectedHotel,
         "selectedHotels.$[elem].numberOfRooms": numberOfRooms,
-        "selectedHotels.$[elem].numberOfSupplements": numberOfSupplements
+        "selectedHotels.$[elem].numberofSupplements": numberofSupplements
       }
     }, {
       arrayFilters: [{ "elem.day": day }],
