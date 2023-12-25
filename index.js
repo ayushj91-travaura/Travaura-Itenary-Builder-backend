@@ -143,18 +143,19 @@ app.get('/api/hotel', async (req, res) => {
   }
 });
 
-const BaliHotels = require('./backend-api/model/BaliHotels');
+const BaliHotelsModel = require('./backend-api/model/BaliHotels');
 
 app.get('/api/BaliHotels', async (req, res) => {
   try {
-    const BaliHotels = await BaliHotels.find();
-    res.json(BaliHotels);
-    console.log("mongo working fine!!");
+    const hotels = await BaliHotelsModel.find();
+    res.json(hotels);
+    console.log("Mongo working fine!!");
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 app.put('/api/updateHotel/:id', async (req, res) => {
   const { id } = req.params;
