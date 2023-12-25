@@ -74,9 +74,6 @@ app.post('/generate-pdf', async (req, res) => {
   }
 });
 
-
- 
-
 const data = require('./backend-api/model/data');
 
 app.get('/api/data', async (req, res) => {
@@ -89,6 +86,19 @@ app.get('/api/data', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }); 
+
+const BaliData = require('./backend-api/model/BaliData');
+
+app.get('/api/BaliData', async (req, res) => {
+  try {
+    const BaliDatas = await BaliData.find();
+    res.json(BaliDatas);
+    console.log("mongo working fine!!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
 
