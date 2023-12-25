@@ -327,6 +327,45 @@ app.delete('/deleteActivity/:id', async (req, res) => {
   }
 });
 
+app.delete('/deleteHotel/:id', async (req, res) => {
+  const { id } = req.params;
+  const { day, selectedHotel } = req.body;
+
+  try {
+    const updatedDocument = await user.findByIdAndUpdate(id, {
+      $pull: {
+        "selectedHotels": { "day": day, "selectedHotel": selectedHotel }
+      }
+    }, {
+      new: true
+    });
+
+    res.json(updatedDocument);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+app.post('/addHotel/:id', async (req, res) => {
+  const { id } = req.params;
+  const { day, selectedHotel } = req.body;
+
+  try {
+    const updatedDocument = await user.findByIdAndUpdate(id, {
+      $push: {
+        "selectedHotels": { "day": day, "selectedHotel": selectedHotel }
+      }
+    }, {
+      
+      new: true
+    });
+
+    res.json(updatedDocument);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 
 
 
