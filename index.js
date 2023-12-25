@@ -350,12 +350,12 @@ app.delete('/deleteHotel/:id', async (req, res) => {
 
 app.post('/addHotel/:id', async (req, res) => {
   const { id } = req.params;
-  const { day, selectedHotel, numberOfRooms, numberOfSupplements } = req.body;
+  const { day, selectedHotel, numberOfRooms, numberofSupplements } = req.body;
 
   try {
     const updatedDocument = await user.findByIdAndUpdate(id, {
       $push: {
-        "selectedHotels": { "day": day, "selectedHotel": selectedHotel, "numberOfRooms": numberOfRooms, "numberOfSupplements": numberOfSupplements }
+        "selectedHotels": { "day": day, "selectedHotel": selectedHotel, "numberOfRooms": numberOfRooms, "numberofSupplements": numberofSupplements }
       }
     }, {
       
