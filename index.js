@@ -135,12 +135,14 @@ app.get('/api/hotel', async (req, res) => {
 
 app.put('/api/updateHotel/:id', async (req, res) => {
   const { id } = req.params;
-  const { day, selectedHotel } = req.body;
+  const { day, selectedHotel, numberOfRooms, numberOfSupplements } = req.body;
 
   try {
     const updatedDocument = await user.findByIdAndUpdate(id, {
       $set: {
-        "selectedHotels.$[elem].selectedHotel": selectedHotel
+        "selectedHotels.$[elem].selectedHotel": selectedHotel,
+        "selectedHotels.$[elem].numberOfRooms": numberOfRooms,
+        "selectedHotels.$[elem].numberOfSupplements": numberOfSupplements
       }
     }, {
       arrayFilters: [{ "elem.day": day }],
@@ -348,12 +350,12 @@ app.delete('/deleteHotel/:id', async (req, res) => {
 
 app.post('/addHotel/:id', async (req, res) => {
   const { id } = req.params;
-  const { day, selectedHotel } = req.body;
+  const { day, selectedHotel, numberOfRooms, numberOfSupplements } = req.body;
 
   try {
     const updatedDocument = await user.findByIdAndUpdate(id, {
       $push: {
-        "selectedHotels": { "day": day, "selectedHotel": selectedHotel }
+        "selectedHotels": { "day": day, "selectedHotel": selectedHotel, "numberOfRooms": numberOfRooms, "numberOfSupplements": numberOfSupplements }
       }
     }, {
       
