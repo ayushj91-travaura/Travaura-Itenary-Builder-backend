@@ -392,7 +392,19 @@ app.post('/addHotel/:id', async (req, res) => {
   }
 });
 
+const baliIntercityTransfersSchema = require('./backend-api/model/BaliIntercityTransfer');
 
+app.get('/api/baliIntercityTransfersSchema', async (req, res) => {
+  try {
+    const baliIntercityTransfersSchemas = await baliIntercityTransfersSchema.find();
+    res.json(baliIntercityTransfersSchemas);
+    console.log("mongo working fine!!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+});
 
 
 
