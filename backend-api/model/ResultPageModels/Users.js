@@ -57,7 +57,7 @@ const userSchema = new mongoose.Schema({
     selectedAddons: [AddonsSchema],
     selectedBuses: [busSchema],
     selectedTrains: [trainSchema],
-    selectedBaliICTransfers: [BaliICTransferSchema]
+    selectedBaliICTransfers: [BaliICTransferSchema],
 });
 
 const User = mongoose.model('User', userSchema);
