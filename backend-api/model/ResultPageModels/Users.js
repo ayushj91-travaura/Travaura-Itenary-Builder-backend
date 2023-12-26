@@ -40,7 +40,6 @@ const BaliICTransferSchema= new mongoose.Schema({
     arrival: String,
     seater: Number,
     priceInr: Number,
-   
     numberOfTransfers: Number
 
 });
