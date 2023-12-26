@@ -9,6 +9,7 @@ const SelectedTransferSchema = require('./SelectedTransfers.js').schema;
 const busSchema = require('./busSchema.js').schema;
 const trainSchema = require('./trainSchema.js').schema;
 
+
 const DayActivitiesSchema = new mongoose.Schema({
     day: Number,
     region: String,
@@ -33,6 +34,16 @@ const DayTransfersSchema = new mongoose.Schema({
     transfer: SelectedTransferSchema
 });
 
+const BaliICTransferSchema= new mongoose.Schema({
+    day: Number,
+    source: String,
+    arrival: String,
+    seater: Number,
+    priceInr: Number,
+    priceUsd: Number,
+    numberOfTransfers: Number
+
+});
 
 
 const userSchema = new mongoose.Schema({
@@ -46,7 +57,8 @@ const userSchema = new mongoose.Schema({
     selectedInternationalFlights: [InternationalFlightsSchema],
     selectedAddons: [AddonsSchema],
     selectedBuses: [busSchema],
-    selectedTrains: [trainSchema]
+    selectedTrains: [trainSchema],
+    selectedBaliICTransfers: [BaliICTransferSchema]
 });
 
 const User = mongoose.model('User', userSchema);
