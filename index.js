@@ -271,7 +271,8 @@ app.post('/api/user', async (req, res) => {
       selectedInternationalFlights: req.body.selectedInternationalFlights,
       selectedAddons: req.body.selectedAddons,
       selectedBuses: req.body.selectedBuses,
-      selectedTrains: req.body.selectedTrains
+      selectedTrains: req.body.selectedTrains,
+      selectedBaliICTransfers: req.body.selectedBaliICTransfers
     });
     await userdata.save();
     res.send(userdata);
