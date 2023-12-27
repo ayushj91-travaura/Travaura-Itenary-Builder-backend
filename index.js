@@ -283,16 +283,16 @@ const user = require('./backend-api/model/ResultPageModels/Users');
 //   }
 // });
 
-// app.get('/api/user/:id', async (req, res) => {
-//   try {
-//     const userdata = await user.findById(req.params.id);
-//     res.send(userdata);
+app.get('/api/user/:id', async (req, res) => {
+  try {
+    const userdata = await user.findById(req.params.id);
+    res.send(userdata);
     
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 app.post('/api/user', async (req, res) => {
   const id = req.body.id;
