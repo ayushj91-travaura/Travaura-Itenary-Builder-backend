@@ -258,34 +258,69 @@ const selectedHotel = require('./backend-api/model/ResultPageModels/SelectedHote
 const selectedTransfer = require('./backend-api/model/ResultPageModels/SelectedTransfers');
 const user = require('./backend-api/model/ResultPageModels/Users');
 
-app.post('/api/user', async (req, res) => {
-  try {
-    const userdata = new user({
-      _id: req.body.id,
-      travellerDetails: req.body.travellerDetails,
-      country: req.body.country,
-      selectedActivities: req.body.selectedActivities,
-      selectedHotels: req.body.selectedHotels,
-      selectedTransfers: req.body.selectedTransfers,
-      selectedDomesticFlights: req.body.selectedDomesticFlights,
-      selectedInternationalFlights: req.body.selectedInternationalFlights,
-      selectedAddons: req.body.selectedAddons,
-      selectedBuses: req.body.selectedBuses,
-      selectedTrains: req.body.selectedTrains,
-      selectedBaliICTransfers: req.body.selectedBaliICTransfers
-    });
-    await userdata.save();
-    res.send(userdata);
+// app.post('/api/user', async (req, res) => {
+//   try {
+//     const userdata = new user({
+//       _id: req.body.id,
+//       travellerDetails: req.body.travellerDetails,
+//       country: req.body.country,
+//       selectedActivities: req.body.selectedActivities,
+//       selectedHotels: req.body.selectedHotels,
+//       selectedTransfers: req.body.selectedTransfers,
+//       selectedDomesticFlights: req.body.selectedDomesticFlights,
+//       selectedInternationalFlights: req.body.selectedInternationalFlights,
+//       selectedAddons: req.body.selectedAddons,
+//       selectedBuses: req.body.selectedBuses,
+//       selectedTrains: req.body.selectedTrains,
+//       selectedBaliICTransfers: req.body.selectedBaliICTransfers
+//     });
+//     await userdata.save();
+//     res.send(userdata);
     
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
 
-app.get('/api/user/:id', async (req, res) => {
+// app.get('/api/user/:id', async (req, res) => {
+//   try {
+//     const userdata = await user.findById(req.params.id);
+//     res.send(userdata);
+    
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
+
+app.post('/api/user', async (req, res) => {
+  const id = req.body.id;
+  
+
   try {
-    const userdata = await user.findById(req.params.id);
+    let userdata = await user.findById(id);
+    if (userdata) {
+      // Update existing document
+      userdata = await user.findByIdAndUpdate(id, req.body, { new: true });
+    } else {
+      // Create a new document
+      userdata = new user({
+        _id: req.body.id,
+              travellerDetails: req.body.travellerDetails,
+              country: req.body.country,
+              selectedActivities: req.body.selectedActivities,
+              selectedHotels: req.body.selectedHotels,
+              selectedTransfers: req.body.selectedTransfers,
+              selectedDomesticFlights: req.body.selectedDomesticFlights,
+              selectedInternationalFlights: req.body.selectedInternationalFlights,
+              selectedAddons: req.body.selectedAddons,
+              selectedBuses: req.body.selectedBuses,
+              selectedTrains: req.body.selectedTrains,
+              selectedBaliICTransfers: req.body.selectedBaliICTransfers
+      });
+      await userdata.save();
+    }
     res.send(userdata);
     
   } catch (error) {
