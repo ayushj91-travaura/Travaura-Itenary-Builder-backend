@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
@@ -8,6 +8,8 @@ const puppeteer = require('puppeteer');
 const multer = require('multer');
 const upload = multer();
 const FormData = require('form-data');
+const Api2Pdf = require('api2pdf');
+
 app.use(cors());
 
 
@@ -19,8 +21,8 @@ app.use((err, req, res, next) => {
 require('dotenv').config();
 
 const bodyParser = require('body-parser');
-app.use(bodyParser.json({ limit: '100mb' })); 
-app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+app.use(bodyParser.json({ limit: '10mb' })); 
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 
 
@@ -36,42 +38,54 @@ app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
       console.error(err);
     });
 
+    const a2pClient = new Api2Pdf('e27edf54-d3bb-4e6b-99a4-b14f0f1ec741');
+// app.post('/generate-pdf', async (req, res) => {
+//   try {
+//     const browser = await puppeteer.launch();
+//     const page = await browser.newPage();
+
+//     const url = req.body.url;
+
+//     await page.goto(url, { waitUntil: 'networkidle0' });
+
+//     // Set screen size and generate PDF
+//     const height = await page.evaluate(() => Math.max(
+//       document.body.scrollHeight,
+//       document.documentElement.scrollHeight
+//     ));
+//     await page.setViewport({ width: 1080, height: height });
+
+//     await page.waitForSelector('img');
+
+//     const pdfPath = path.join(__dirname, 'resultPage.pdf');
+//     await page.pdf({
+//       width: '1350px',
+//       height: `${height}px`,
+//       path: pdfPath,
+//       printBackground: true
+//     });
+
+//     console.log('PDF generated!');
+//     await browser.close();
+
+//     // Send the PDF as a response
+//     res.download(pdfPath);
+//   } catch (error) {
+//     console.error('Error:', error.body);
+//     res.status(500).send('Error generating PDF');
+//   }
+// });
 
 app.post('/generate-pdf', async (req, res) => {
-  try {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
+  const urlToPdf = req.body.url; // Assuming the URL is sent in the request body
 
-    const url = req.body.url;
-
-    await page.goto(url, { waitUntil: 'networkidle0' });
-
-    // Set screen size and generate PDF
-    const height = await page.evaluate(() => Math.max(
-      document.body.scrollHeight,
-      document.documentElement.scrollHeight
-    ));
-    await page.setViewport({ width: 1080, height: height });
-
-    await page.waitForSelector('img');
-
-    const pdfPath = path.join(__dirname, 'resultPage.pdf');
-    await page.pdf({
-      width: '1350px',
-      height: `${height}px`,
-      path: pdfPath,
-      printBackground: true
-    });
-
-    console.log('PDF generated!');
-    await browser.close();
-
-    // Send the PDF as a response
-    res.download(pdfPath);
-  } catch (error) {
-    console.error('Error:', error.body);
-    res.status(500).send('Error generating PDF');
-  }
+  a2pClient.chromeUrlToPdf(urlToPdf)
+    .then(function(result) {
+        console.log(result); //successful api call
+    }, function(rejected) {
+        console.log(rejected); //an error occurred
+    }
+);
 });
 
 const data = require('./backend-api/model/data');
@@ -388,6 +402,29 @@ app.delete('/deleteActivity/:id', async (req, res) => {
     res.status(500).send(error);
   }
 });
+
+app.delete('/deleteInternationalFlight/:id/:ind', async (req, res) => {
+  const { id, ind } = req.params; // 'ind' is the index of the element to be removed
+
+  try {
+      // First, set the element at the specified index to undefined
+      let updateQuery = {};
+      updateQuery[`selectedInternationalFlights.${ind}`] = undefined;
+      await user.findByIdAndUpdate(id, {
+          $unset: updateQuery
+      });
+
+      // Then, remove any undefined elements from the array
+      const updatedDocument = await user.findByIdAndUpdate(id, {
+          $pull: { selectedInternationalFlights: null }
+      }, { new: true });
+
+      res.json(updatedDocument);
+  } catch (error) {
+      res.status(500).send(error);
+  }
+});
+
 
 app.delete('/deleteHotel/:id', async (req, res) => {
   const { id } = req.params;
