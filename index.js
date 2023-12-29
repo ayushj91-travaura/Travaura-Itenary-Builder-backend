@@ -404,26 +404,27 @@ app.delete('/deleteActivity/:id', async (req, res) => {
 });
 
 app.delete('/deleteInternationalFlight/:id/:ind', async (req, res) => {
-  const { id, ind } = req.params; // 'ind' is the index of the element to be removed
+  const { id, ind } = req.params;
 
   try {
-      // First, set the element at the specified index to undefined
-      let updateQuery = {};
-      updateQuery[`selectedInternationalFlights.${ind}`] = undefined;
-      await user.findByIdAndUpdate(id, {
-          $unset: updateQuery
-      });
+      let userDoc = await user.findById(id);
 
-      // Then, remove any undefined elements from the array
-      const updatedDocument = await user.findByIdAndUpdate(id, {
-          $pull: { selectedInternationalFlights: null }
-      }, { new: true });
+      if (!userDoc) {
+          return res.status(404).send('User not found');
+      }
+
+      // Remove the element at index 'ind'
+      userDoc.selectedInternationalFlights.splice(ind, 1);
+
+      // Save the updated document
+      const updatedDocument = await userDoc.save();
 
       res.json(updatedDocument);
   } catch (error) {
       res.status(500).send(error);
   }
 });
+
 
 
 app.delete('/deleteHotel/:id', async (req, res) => {
