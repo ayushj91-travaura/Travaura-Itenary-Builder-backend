@@ -470,6 +470,28 @@ app.delete('/deleteDomesticFlight/:id/:ind', async (req, res) => {
 }
 );
 
+app.put('/updateDomesticFlight/:id', async (req, res) => {
+
+  const { id } = req.params;
+  const { selectedDomesticFlight } = req.body;
+  console.log(selectedDomesticFlight);
+  try{
+    const updatedDocument = await user.findByIdAndUpdate(id, {
+      $push: {
+        "selectedDomesticFlights": selectedDomesticFlight
+      }
+    }, {
+      new: true
+    });
+
+    res.json(updatedDocument);
+
+  }
+  catch (error) {
+    res.status(500).send(error);
+}
+});
+
 
 
 app.delete('/deleteHotel/:id', async (req, res) => {
