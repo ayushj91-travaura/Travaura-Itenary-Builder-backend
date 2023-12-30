@@ -425,6 +425,28 @@ app.delete('/deleteInternationalFlight/:id/:ind', async (req, res) => {
   }
 });
 
+app.put('/updateInternationalFlight/:id', async (req, res) => {
+  const { id } = req.params; 
+  const { selectedInternationalFlight } = req.body;
+
+  console.log(selectedInternationalFlight);
+
+  try {
+    const updatedDocument = await user.findByIdAndUpdate(id, {
+      $push: {
+        "selectedInternationalFlights": selectedInternationalFlight
+      }
+    }, {
+      new: true
+    });
+
+    res.json(updatedDocument);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+
 app.delete('/deleteDomesticFlight/:id/:ind', async (req, res) => {
   const { id, ind } = req.params;
 
@@ -445,7 +467,8 @@ app.delete('/deleteDomesticFlight/:id/:ind', async (req, res) => {
   } catch (error) {
       res.status(500).send(error);
   }
-});
+}
+);
 
 
 
@@ -501,6 +524,8 @@ app.get('/api/baliIntercityTransfersSchema', async (req, res) => {
   }
 
 });
+
+
 
 
 
