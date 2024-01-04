@@ -416,7 +416,7 @@ app.delete('/deleteInternationalFlight/:id/:ind', async (req, res) => {
       }
 
       // Remove the element at index 'ind'
-      userDoc.selectedInternationalFlights.splice(ind, 1);
+      userDoc.selectedInternationalFlightOffers.splice(ind, 1);
 
       // Save the updated document
       const updatedDocument = await userDoc.save();
