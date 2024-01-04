@@ -118,6 +118,7 @@ const FlightOfferSchema = new mongoose.Schema({
     travelerPricings: [TravelerPricingSchema],
     dictionaries: DictionariesSchema,
     isInternationalFlight: Boolean,
+    
 });
 
 module.exports = mongoose.model('FlightOffer', FlightOfferSchema);
