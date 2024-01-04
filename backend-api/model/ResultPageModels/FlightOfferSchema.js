@@ -120,4 +120,4 @@ const FlightOfferSchema = new mongoose.Schema({
     isInternationalFlight: Boolean,
 });
 
-module.exports = mongoose.model('FlightOffer', FlightOfferSchema);
+module.exports = mongoose.model('FlightOffer', FlightOfferSchema); 
