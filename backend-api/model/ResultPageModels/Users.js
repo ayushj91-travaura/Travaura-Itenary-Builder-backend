@@ -59,7 +59,7 @@ const userSchema = new mongoose.Schema({
     selectedBuses: [busSchema],
     selectedTrains: [trainSchema],
     selectedBaliICTransfers: [BaliICTransferSchema],
-    selectedInternationalFlightOffers: FlightOfferSchema,
+    selectedInternationalFlightOffers: [FlightOfferSchema],
 });
 
 const User = mongoose.model('User', userSchema);

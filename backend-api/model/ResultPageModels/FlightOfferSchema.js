@@ -60,8 +60,8 @@ const TravelerPricingSchema = new mongoose.Schema({
     travelerType: String,
     price: {
         currency: String,
-        total: mongoose.Types.Decimal128,
-        base: mongoose.Types.Decimal128
+        total: Number,
+        base: Number
     },
     fareDetailsBySegment: [FareDetailsBySegmentSchema]
 });
@@ -105,15 +105,10 @@ const FlightOfferSchema = new mongoose.Schema({
     itineraries: [ItinerarySchema],
     price: {
         currency: String,
-        total: mongoose.Types.Decimal128,
-        base: mongoose.Types.Decimal128,
-        fees: [
-            {
-                amount: mongoose.Types.Decimal128,
-                type: String
-            }
-        ],
-        grandTotal: mongoose.Types.Decimal128
+        base: Number,
+        
+        grandTotal: Number,
+        total: Number
     },
     pricingOptions: {
         fareType: [String],

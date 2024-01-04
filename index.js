@@ -337,6 +337,7 @@ app.post('/api/user', async (req, res) => {
       await userdata.save();
     }
     res.send(userdata);
+    console.log(req.body);
     
   } catch (error) {
     console.error(error);
