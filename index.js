@@ -412,7 +412,7 @@ app.delete('/deleteInternationalFlight/:id/:ind', async (req, res) => {
       let userDoc = await user.findById(id);
 
       if (!userDoc) {
-          return res.status(404).send('User not found');
+          return res.status(404).send('User not found'); 
       }
 
       // Remove the element at index 'ind'
