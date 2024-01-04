@@ -117,8 +117,8 @@ const FlightOfferSchema = new mongoose.Schema({
     validatingAirlineCodes: [String],
     travelerPricings: [TravelerPricingSchema],
     dictionaries: DictionariesSchema,
-    isInternationalFlight: Boolean,
-    
+    isInternationalFlight: Boolean
+
 });
 
 module.exports = mongoose.model('FlightOffer', FlightOfferSchema);
