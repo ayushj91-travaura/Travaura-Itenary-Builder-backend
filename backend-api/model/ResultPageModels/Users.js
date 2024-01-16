@@ -45,6 +45,18 @@ const BaliICTransferSchema= new mongoose.Schema({
 
 });
 
+const BookingSelectedDomesticFlightsSchema = new mongoose.Schema({
+    token: String,
+    numberOfBaggages: Number,
+});
+
+const BookingSelectedInternationalFlightsSchema = new mongoose.Schema({
+    token: String,
+    numberOfBaggages: Number,
+});
+
+
+
 
 const userSchema = new mongoose.Schema({
     _id: String,
@@ -60,6 +72,8 @@ const userSchema = new mongoose.Schema({
     selectedTrains: [trainSchema],
     selectedBaliICTransfers: [BaliICTransferSchema],
     selectedInternationalFlightOffers: [FlightOfferSchema],
+    BookingSelectedDomesticFlights: [BookingSelectedDomesticFlightsSchema], 
+    BookingSelectedInternationalFlights: [BookingSelectedInternationalFlightsSchema],
 });
 
 const User = mongoose.model('User', userSchema);

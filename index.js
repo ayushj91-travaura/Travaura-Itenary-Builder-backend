@@ -332,7 +332,9 @@ app.post('/api/user', async (req, res) => {
               selectedBuses: req.body.selectedBuses,
               selectedTrains: req.body.selectedTrains,
               selectedBaliICTransfers: req.body.selectedBaliICTransfers,
-              selectedInternationalFlightOffers: req.body.selectedInternationalFlightOffers
+              selectedInternationalFlightOffers: req.body.selectedInternationalFlightOffers,
+              BookingSelectedDomesticFlights: req.body.BookingSelectedDomesticFlights,  
+              BookingSelectedInternationalFlights: req.body.BookingSelectedInternationalFlights,
       });
       await userdata.save();
     }
@@ -553,7 +555,7 @@ app.get('/api/baliIntercityTransfersSchema', async (req, res) => {
 
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
