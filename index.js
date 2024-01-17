@@ -475,6 +475,50 @@ app.delete('/deleteDomesticFlightManual/:id/:ind', async (req, res) => {
 }
 );
 
+app.delete('/deleteBookingInternationalFlight/:id/:token', async (req, res) => {
+  const { id, token } = req.params;
+
+  try {
+      let userDoc = await user.findById(id);
+
+      if (!userDoc) {
+          return res.status(404).send('User not found');
+      }
+
+      userDoc.BookingSelectedInternationalFlights = userDoc.BookingSelectedInternationalFlights.filter((flight) => flight.token !== token);
+
+      // Save the updated document
+      const updatedDocument = await userDoc.save();
+
+      res.json(updatedDocument);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+);
+
+app.delete('/deleteBookingDomesticFlight/:id/:token', async (req, res) => {
+  const { id, token } = req.params;
+
+  try {
+      let userDoc = await user.findById(id);
+
+      if (!userDoc) {
+          return res.status(404).send('User not found');
+      }
+
+      userDoc.BookingSelectedDomesticFlights = userDoc.BookingSelectedDomesticFlights.filter((flight) => flight.token !== token);
+
+      // Save the updated document
+      const updatedDocument = await userDoc.save();
+
+      res.json(updatedDocument);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+);
+
 app.put('/updateInternationalFlight/:id', async (req, res) => {
   const { id } = req.params; 
   const { selectedInternationalFlight } = req.body;
