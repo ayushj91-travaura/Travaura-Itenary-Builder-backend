@@ -642,6 +642,21 @@ app.get('/api/baliIntercityTransfersSchema', async (req, res) => {
 
 });
 
+const cambodiaPackageSchema = require('./backend-api/model/CambodiaPackages');
+
+app.get('/api/cambodiaPackageSchema', async (req, res) => {
+  try {
+    const cambodiaPackageSchemas = await cambodiaPackageSchema.find();
+    res.json(cambodiaPackageSchemas);
+    console.log("mongo working fine!!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+}
+);
+
 
 
 
