@@ -60,6 +60,7 @@ const BookingSelectedInternationalFlightsSchema = new mongoose.Schema({
 
 const userSchema = new mongoose.Schema({
     _id: String,
+    agentEmail: String,
     travellerDetails: TravelerDetailsSchema ,
     country: String,
     selectedActivities: [DayActivitiesSchema],
