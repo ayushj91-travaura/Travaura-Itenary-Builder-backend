@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const CambodiaPackage = require('../CambodiaPackages.js');
+const { HotelSchema } = require('../CambodiaHotels.js');
 const ActivitiesSchema = require('./ActivitiesSchema.js').schema;
 const DomesticFlightsSchema = require('./DomesticFlight.js').schema;  
 const InternationalFlightsSchema = require('./InternationalFlight.js').schema;  
@@ -79,6 +80,7 @@ const userSchema = new mongoose.Schema({
     selectedCambodiaPackage: [CambodiaPackage.schema],
     CambodiaWhen: String,
     CambodiaAccomodationType: String,
+    selectedCambodiaHotels: [HotelSchema],
 });
 
 const User = mongoose.model('User', userSchema);
