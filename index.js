@@ -337,7 +337,8 @@ app.post('/api/user', async (req, res) => {
               BookingSelectedDomesticFlights: req.body.BookingSelectedDomesticFlights,  
               BookingSelectedInternationalFlights: req.body.BookingSelectedInternationalFlights,
               selectedCambodiaPackage: req.body.selectedCambodiaPackage,
-              CambodiaWhen: req.body.CambodiaWhen
+              CambodiaWhen: req.body.CambodiaWhen,
+              CambodiaAccomodationType: req.body.CambodiaAccomodationType,
       });
       await userdata.save();
     }

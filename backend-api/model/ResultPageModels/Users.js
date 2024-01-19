@@ -78,6 +78,7 @@ const userSchema = new mongoose.Schema({
     BookingSelectedInternationalFlights: [BookingSelectedInternationalFlightsSchema],
     selectedCambodiaPackage: [CambodiaPackage.schema],
     CambodiaWhen: String,
+    CambodiaAccomodationType: String,
 });
 
 const User = mongoose.model('User', userSchema);
