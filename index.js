@@ -660,6 +660,21 @@ app.get('/api/cambodiaPackageSchema', async (req, res) => {
 }
 );
 
+const cambodiaHotelsSchema = require('./backend-api/model/CambodiaHotels');
+
+app.get('/api/cambodiaHotelsSchema', async (req, res) => {
+  try {
+    const cambodiaHotelsSchemas = await cambodiaHotelsSchema.find();
+    res.json(cambodiaHotelsSchemas);
+    console.log("mongo working fine!!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+}
+);
+
 
 
 
