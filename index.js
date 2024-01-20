@@ -676,6 +676,30 @@ app.get('/api/cambodiaHotelsSchema', async (req, res) => {
 }
 );
 
+app.put('/addCambodiaHotels/:id', async (req, res) => {
+  const { id } = req.params;
+  const { selectedCambodiaHotels } = req.body;
+  console.log(selectedCambodiaHotels);
+  console.log(id);
+
+  try {
+    const updatedDocument = await user.findByIdAndUpdate(id, {
+      $push: {
+        "selectedCambodiaHotels": selectedCambodiaHotels
+      }
+    }, {
+      new: true
+    });
+
+    res.json(updatedDocument);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+);
+
+
+
 
 
 

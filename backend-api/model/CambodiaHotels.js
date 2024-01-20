@@ -24,7 +24,7 @@ const CambodiaHotelsSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('CambodiaHotels', CambodiaHotelsSchema);
-module.exports.HotelSchema = HotelSchema;
+
 
 // "Region": "North",
 // "City": "Siem Reap",
