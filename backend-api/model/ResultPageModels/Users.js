@@ -57,6 +57,11 @@ const BookingSelectedInternationalFlightsSchema = new mongoose.Schema({
     numberOfBaggages: Number,
 });
 
+const selectedCambodiaHotelsSchema = new mongoose.Schema({
+    day: Number,
+    hotel: HotelSchema
+});
+
 
 
 
@@ -80,7 +85,7 @@ const userSchema = new mongoose.Schema({
     selectedCambodiaPackage: [CambodiaPackage.schema],
     CambodiaWhen: String,
     CambodiaAccomodationType: String,
-    selectedCambodiaHotels: [HotelSchema],
+    selectedCambodiaHotels: [selectedCambodiaHotelsSchema],
 });
 
 const User = mongoose.model('User', userSchema);
