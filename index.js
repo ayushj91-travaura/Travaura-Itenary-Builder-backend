@@ -129,6 +129,23 @@ app.get('/api/transfer', async (req, res) => {
   }
 });
 
+const BaliTransfer = require('./backend-api/model/BaliTransfers');
+
+app.get('/api/BaliTransfer', async (req, res) => {
+  try {
+    const BaliTransfers = await BaliTransfer.find();
+    res.json(BaliTransfers);
+    console.log("mongo working fine!!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+}
+);
+
+
+
 const flight = require('./backend-api/model/flight');
 
 app.get('/api/flight', async (req, res) => {
@@ -480,6 +497,7 @@ app.delete('/deleteDomesticFlightManual/:id/:ind', async (req, res) => {
 }
 );
 
+
 app.delete('/deleteBookingInternationalFlight/:id/:token', async (req, res) => {
   const { id, token } = req.params;
 
@@ -695,6 +713,55 @@ app.put('/addCambodiaHotels/:id', async (req, res) => {
   } catch (error) {
     res.status(500).send(error);
   }
+}
+);
+
+app.delete('/deleteCambodiaHotel/:id/:day', async (req, res) => {
+  const { id, day } = req.params;
+
+  try {
+    const updatedDocument = await user.findByIdAndUpdate(id, {
+      $pull: {
+        "selectedCambodiaHotels": { "day": day }
+      }
+    }, {
+      new: true
+    });
+
+    res.json(updatedDocument);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+);
+
+const ThailandActivitiesSchema = require('./backend-api/model/ThailantActivities');
+
+app.get('/api/ThailandActivitiesSchema', async (req, res) => {
+  try {
+    const ThailandActivitiesSchemas = await ThailandActivitiesSchema.find();
+    res.json(ThailandActivitiesSchemas);
+    console.log("mongo working fine!!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+}
+);
+
+const ThailandHotelsSchema = require('./backend-api/model/ThailandHotels');
+
+app.get('/api/ThailandHotelsSchema', async (req, res) => {
+  try {
+    const ThailandHotelsSchemas = await ThailandHotelsSchema.find();
+    res.json(ThailandHotelsSchemas);
+    console.log("mongo working fine!!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
 }
 );
 
