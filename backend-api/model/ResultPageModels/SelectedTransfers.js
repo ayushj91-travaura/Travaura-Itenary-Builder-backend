@@ -5,9 +5,11 @@ const selectedTransferSchema = new mongoose.Schema({
     city: String,
     vehicleType: String,
     seater: Number,
+    Seater: String,
     priceUSD: Number,
     price: Number,
-    additionalInfo: String
+    additionalInfo: String,
+    arrivalDropOffAirport: String,
 });
 
 // Create a model for the combined schema

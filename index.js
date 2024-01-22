@@ -765,8 +765,37 @@ app.get('/api/ThailandHotelsSchema', async (req, res) => {
 }
 );
 
+const ThailandAirportTransfersSchema = require('./backend-api/model/ThailandAirportTransfer');
+
+app.get('/api/ThailandAirportTransfersSchema', async (req, res) => {
+  try {
+    const ThailandAirportTransfersSchemas = await ThailandAirportTransfersSchema.find();
+    res.json(ThailandAirportTransfersSchemas);
+    console.log("mongo working fine!!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+}
+);
 
 
+const ThailandIntercityTransfersSchema = require('./backend-api/model/ThailandIntercityTransfer');
+
+app.get('/api/ThailandIntercityTransfersSchema', async (req, res) => {
+  try {
+    const ThailandIntercityTransfersSchemas = await ThailandIntercityTransfersSchema.find();
+    res.json(ThailandIntercityTransfersSchemas);
+    console.log("mongo working fine!!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+
+  }
+
+}
+);
 
 
 
