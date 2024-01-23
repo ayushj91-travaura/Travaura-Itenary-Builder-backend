@@ -42,7 +42,14 @@ const ActivitiesSchema = new Schema({
   AddedInclusions: String,
   Conditions: String,
   ConnectingFlights: String,
-  Tags: String
+  Tags: String,
+  Star: String,
+  IsOvernightCruise: String,
+    Interests: String,
+    Rating: String,
+    Mealduringevent: String,
+    Starttimeoftheevent: String,
+    Endtimeoftheevent: String
 });
 
 module.exports = mongoose.model('Activities', ActivitiesSchema);
