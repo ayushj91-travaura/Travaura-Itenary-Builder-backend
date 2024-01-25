@@ -797,6 +797,51 @@ app.get('/api/ThailandIntercityTransfersSchema', async (req, res) => {
 }
 );
 
+// const updateTravellerDetails = async (formValues) => {
+//   try {
+//     const response = await fetch(
+//       `https://travaura-tech-api.azurewebsites.net/api/user/${id}`,
+//       {
+//         method: "PUT",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ travellerDetails: formValues }),
+//       }
+//     );
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
+//     const data = await response.json();
+//     console.log("data: ", data);
+//   } catch (error) {
+//     console.error("Failed to update traveller details:", error);
+//     // Handle the error appropriately
+//   }
+// }
+
+app.put('/updateTravellerDetails/:id', async (req, res) => {
+  const { id } = req.params;
+  const { travellerDetails } = req.body;
+  console.log(travellerDetails);
+  console.log(id);
+
+  try {
+    const updatedDocument = await user.findByIdAndUpdate(id, {
+      $set: {
+        "travellerDetails": travellerDetails
+      }
+    }, {
+      new: true
+    });
+
+    res.json(updatedDocument);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+);
+
 
 
 
