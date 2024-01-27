@@ -785,6 +785,7 @@ app.get('/api/ThailandAirportTransfersSchema', async (req, res) => {
 
 const ThailandIntercityTransfersSchema = require('./backend-api/model/ThailandIntercityTransfer');
 const Travel = require('./backend-api/model/flight');
+const { reverse } = require('dns');
 
 app.get('/api/ThailandIntercityTransfersSchema', async (req, res) => {
   try {
@@ -860,7 +861,7 @@ app.get("/itineraries", async (req, res) => {
     }
 
     const itineraries = await user.find(query.length ? { $or: query } : {});
-    const itinerariesWithNameAndID = itineraries.map((itinerary) => ({
+    let itinerariesWithNameAndID = itineraries.map((itinerary) => ({
       _id: itinerary._id,
       name: itinerary.travellerDetails.name,
       Days: itinerary.travellerDetails.duration,
@@ -876,7 +877,7 @@ app.get("/itineraries", async (req, res) => {
       children: itinerary.travellerDetails.child,
       infants: itinerary.travellerDetails.infants,
     }));
-
+itinerariesWithNameAndID = itinerariesWithNameAndID.reverse();
     res.json(itinerariesWithNameAndID);
   } catch (error) {
     console.error("Error during database fetch:", error);
