@@ -339,6 +339,7 @@ app.post('/api/user', async (req, res) => {
       userdata = new user({
         _id: req.body.id,
         agentEmail: req.body.agentEmail,
+        agentUID: req.body.agentUID,
               travellerDetails: req.body.travellerDetails,
               country: req.body.country,
               selectedActivities: req.body.selectedActivities,
