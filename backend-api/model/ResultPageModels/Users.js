@@ -80,6 +80,7 @@ const userSchema = new mongoose.Schema({
     _id: String,
     agentEmail: String,
     agentUID: String,
+    createdAt: String,
     travellerDetails: TravelerDetailsSchema ,
     country: String,
     selectedActivities: [DayActivitiesSchema],

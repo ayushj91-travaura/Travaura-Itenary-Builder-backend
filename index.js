@@ -358,6 +358,7 @@ app.post('/api/user', async (req, res) => {
               CambodiaWhen: req.body.CambodiaWhen,
               CambodiaAccomodationType: req.body.CambodiaAccomodationType,
               selectedCambodiaHotels: req.body.selectedCambodiaHotels,
+              createdAt: req.body.createdAt,
       });
       await userdata.save();
     }
@@ -783,6 +784,7 @@ app.get('/api/ThailandAirportTransfersSchema', async (req, res) => {
 
 
 const ThailandIntercityTransfersSchema = require('./backend-api/model/ThailandIntercityTransfer');
+const Travel = require('./backend-api/model/flight');
 
 app.get('/api/ThailandIntercityTransfersSchema', async (req, res) => {
   try {
@@ -842,6 +844,75 @@ app.put('/updateTravellerDetails/:id', async (req, res) => {
   }
 }
 );
+
+app.get("/itineraries", async (req, res) => {
+  const { agentUID, email } = req.query; // Retrieve agentUID and email from query parameters
+
+  try {
+    let query = [];
+
+    // Add conditions to the query array if agentUID and email are provided
+    if (agentUID) {
+      query.push({ agentUID: agentUID });
+    }
+    if (email) {
+      query.push({ agentEmail: email });
+    }
+
+    const itineraries = await user.find(query.length ? { $or: query } : {});
+    const itinerariesWithNameAndID = itineraries.map((itinerary) => ({
+      _id: itinerary._id,
+      name: itinerary.travellerDetails.name,
+      Days: itinerary.travellerDetails.duration,
+      ActivitiesCount: itinerary.selectedActivities.length,
+      FLightsIncluded: itinerary.selectedDomesticFlights.length + itinerary.selectedInternationalFlights.length + itinerary.BookingSelectedDomesticFlights.length + itinerary.BookingSelectedInternationalFlights.length,
+      country: itinerary.travellerDetails.country,
+      agentUID: itinerary.agentUID,
+      agentEmail: itinerary.agentEmail,
+      createdAt: itinerary.createdAt,
+      visa: itinerary.travellerDetails.visa,
+      TravelDate: itinerary.travellerDetails.dateOfTravel,
+      adults: itinerary.travellerDetails.adults,
+      children: itinerary.travellerDetails.child,
+      infants: itinerary.travellerDetails.infants,
+    }));
+
+    res.json(itinerariesWithNameAndID);
+  } catch (error) {
+    console.error("Error during database fetch:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+
+
+
+// useEffect(() => {
+//   const fetchData = async () => {
+//     try {
+//       const queryParams = new URLSearchParams({
+//         agentUID: agentUID,
+//         email: currentUser.email
+//       }).toString();
+
+//       const response = await fetch(`http://localhost:5001/itineraries?${queryParams}`);
+//       if (response.ok) {
+//         const data = await response.json();
+//         setItineraries(data);
+//       } else {
+//         throw new Error('Network response was not ok.');
+//       }
+//     } catch (error) {
+//       console.error("Error during fetch:", error.message);
+//     }
+//   };
+
+//   if (agentUID && currentUser && currentUser.email) {
+//     fetchData();
+//   }
+// }, [agentUID, currentPage]); // Depends on currentPage if you want to refetch when page changes
+
 
 
 
