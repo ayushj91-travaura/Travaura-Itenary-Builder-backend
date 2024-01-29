@@ -903,7 +903,7 @@ app.get("/itineraries", async (req, res) => {
     if (isAdmin) {
       // If the request is from an admin, aggregate data grouped by agentEmail
       const itineraries = await user.aggregate([
-        {
+        { 
           $match: {
             $or: [
               { agentEmail: { $exists: true, $ne: "" } }, // Ensure agentEmail exists and is not an empty string
