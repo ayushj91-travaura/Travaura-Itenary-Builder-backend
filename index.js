@@ -38,7 +38,7 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
       console.error(err);
     });
 
-    const a2pClient = new Api2Pdf('e27edf54-d3bb-4e6b-99a4-b14f0f1ec741');
+    // const a2pClient = new Api2Pdf('e27edf54-d3bb-4e6b-99a4-b14f0f1ec741');
 // app.post('/generate-pdf', async (req, res) => {
 //   try {
 //     const browser = await puppeteer.launch();
@@ -845,74 +845,139 @@ app.put('/updateTravellerDetails/:id', async (req, res) => {
   }
 }
 );
+// await user.find(query.length ? { $or: query } : {});
+// app.get("/itineraries", async (req, res) => {
+//   const { agentUID, email } = req.query; // Retrieve agentUID and email from query parameters
+
+//   try {
+//     let query = [];
+
+//     // Add conditions to the query array if agentUID and email are provided
+//     if (agentUID) {
+//       query.push({ agentUID: agentUID });
+//     }
+//     if (email) {
+//       query.push({ agentEmail: email });
+//     }
+// const AllDataSortedByAgentEmail = {};
+//     if(email === "ayushjha@travaura.com" || agentUID === "BWgaKt1CsgegQ4gDJPsvfy5iPu42"){
+      
+//     }
+      
+
+
+//     const itineraries = await user.find(query.length ? { $or: query } : {});
+    
+//     let itinerariesWithNameAndID = itineraries.map((itinerary) => ({
+//       _id: itinerary._id,
+//       name: itinerary.travellerDetails.name,
+//       Days: itinerary.travellerDetails.duration,
+//       ActivitiesCount: itinerary.selectedActivities.length,
+//       FLightsIncluded: itinerary.selectedDomesticFlights.length + itinerary.selectedInternationalFlights.length + itinerary.BookingSelectedDomesticFlights.length + itinerary.BookingSelectedInternationalFlights.length,
+//       country: itinerary.travellerDetails.country,
+//       agentUID: itinerary.agentUID,
+//       agentEmail: itinerary.agentEmail,
+//       createdAt: itinerary.createdAt,
+//       visa: itinerary.travellerDetails.visa,
+//       TravelDate: itinerary.travellerDetails.dateOfTravel,
+//       adults: itinerary.travellerDetails.adults,
+//       children: itinerary.travellerDetails.child,
+//       infants: itinerary.travellerDetails.infants,
+//     }));
+// itinerariesWithNameAndID = itinerariesWithNameAndID.reverse();
+//     res.json(itinerariesWithNameAndID);
+//   } catch (error) {
+//     console.error("Error during database fetch:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 app.get("/itineraries", async (req, res) => {
-  const { agentUID, email } = req.query; // Retrieve agentUID and email from query parameters
+  const { agentUID, email} = req.query; 
+  const isAdmin = req.query.isAdmin === 'true';
 
   try {
     let query = [];
 
-    // Add conditions to the query array if agentUID and email are provided
-    if (agentUID) {
-      query.push({ agentUID: agentUID });
-    }
-    if (email) {
-      query.push({ agentEmail: email });
-    }
+    // Check for admin access
+    if (isAdmin) {
+      // If the request is from an admin, aggregate data grouped by agentEmail
+      const itineraries = await user.aggregate([
+        {
+          $match: {
+            $or: [
+              { agentEmail: { $exists: true, $ne: "" } }, // Ensure agentEmail exists and is not an empty string
+              { agentUID: { $exists: true, $ne: "" } }    // Ensure agentUID exists and is not an empty string
+            ]
+          }
+        },
+        {
+          $group: {
+            _id: "$agentEmail", // Group by agentEmail. Change this to "$agentUID" to group by agentUID instead
+            itineraries: {
+              $push: {
+                _id: "$_id",
+                name: "$travellerDetails.name",
+                Days: "$travellerDetails.duration",
+                ActivitiesCount: { $size: "$selectedActivities" },
+                FLightsIncluded: {
+                  $add: [
+                    { $size: "$selectedDomesticFlights" },
+                    { $size: "$selectedInternationalFlights" },
+                    { $size: "$BookingSelectedDomesticFlights" },
+                    { $size: "$BookingSelectedInternationalFlights" }
+                  ]
+                },
+                country: "$travellerDetails.country",
+                agentUID: "$agentUID",
+                createdAt: "$createdAt",
+                visa: "$travellerDetails.visa",
+                TravelDate: "$travellerDetails.dateOfTravel",
+                adults: "$travellerDetails.adults",
+                children: "$travellerDetails.child",
+                infants: "$travellerDetails.infants",
+              }
+            }
+          }
+        },
+        { $sort: { "_id": 1 } } // Sort groups by agentEmail or agentUID
+      ]);
 
-    const itineraries = await user.find(query.length ? { $or: query } : {});
-    let itinerariesWithNameAndID = itineraries.map((itinerary) => ({
-      _id: itinerary._id,
-      name: itinerary.travellerDetails.name,
-      Days: itinerary.travellerDetails.duration,
-      ActivitiesCount: itinerary.selectedActivities.length,
-      FLightsIncluded: itinerary.selectedDomesticFlights.length + itinerary.selectedInternationalFlights.length + itinerary.BookingSelectedDomesticFlights.length + itinerary.BookingSelectedInternationalFlights.length,
-      country: itinerary.travellerDetails.country,
-      agentUID: itinerary.agentUID,
-      agentEmail: itinerary.agentEmail,
-      createdAt: itinerary.createdAt,
-      visa: itinerary.travellerDetails.visa,
-      TravelDate: itinerary.travellerDetails.dateOfTravel,
-      adults: itinerary.travellerDetails.adults,
-      children: itinerary.travellerDetails.child,
-      infants: itinerary.travellerDetails.infants,
-    }));
-itinerariesWithNameAndID = itinerariesWithNameAndID.reverse();
-    res.json(itinerariesWithNameAndID);
+      res.json(itineraries);
+    } else {
+      // For non-admin users, add conditions to the query array if agentUID and email are provided
+      if (agentUID) {
+        query.push({ agentUID: agentUID });
+      }
+      if (email) {
+        query.push({ agentEmail: email });
+      }
+
+      const itineraries = await user.find(query.length ? { $or: query } : {});
+      let itinerariesWithNameAndID = itineraries.map(itinerary => ({
+        _id: itinerary._id,
+        name: itinerary.travellerDetails.name,
+        Days: itinerary.travellerDetails.duration,
+        ActivitiesCount: itinerary.selectedActivities.length,
+        FLightsIncluded: itinerary.selectedDomesticFlights.length + itinerary.selectedInternationalFlights.length + itinerary.BookingSelectedDomesticFlights.length + itinerary.BookingSelectedInternationalFlights.length,
+        country: itinerary.travellerDetails.country,
+        agentUID: itinerary.agentUID,
+        agentEmail: itinerary.agentEmail,
+        createdAt: itinerary.createdAt,
+        visa: itinerary.travellerDetails.visa,
+        TravelDate: itinerary.travellerDetails.dateOfTravel,
+        adults: itinerary.travellerDetails.adults,
+        children: itinerary.travellerDetails.child,
+        infants: itinerary.travellerDetails.infants,
+      }));
+      itinerariesWithNameAndID = itinerariesWithNameAndID.reverse();
+      res.json(itinerariesWithNameAndID);
+    }
   } catch (error) {
     console.error("Error during database fetch:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
-
-
-
-
-// useEffect(() => {
-//   const fetchData = async () => {
-//     try {
-//       const queryParams = new URLSearchParams({
-//         agentUID: agentUID,
-//         email: currentUser.email
-//       }).toString();
-
-//       const response = await fetch(`http://localhost:5001/itineraries?${queryParams}`);
-//       if (response.ok) {
-//         const data = await response.json();
-//         setItineraries(data);
-//       } else {
-//         throw new Error('Network response was not ok.');
-//       }
-//     } catch (error) {
-//       console.error("Error during fetch:", error.message);
-//     }
-//   };
-
-//   if (agentUID && currentUser && currentUser.email) {
-//     fetchData();
-//   }
-// }, [agentUID, currentPage]); // Depends on currentPage if you want to refetch when page changes
 
 
 
