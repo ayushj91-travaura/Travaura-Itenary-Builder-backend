@@ -801,28 +801,7 @@ app.get('/api/ThailandIntercityTransfersSchema', async (req, res) => {
 }
 );
 
-// const updateTravellerDetails = async (formValues) => {
-//   try {
-//     const response = await fetch(
-//       `https://travaura-tech-api.azurewebsites.net/api/user/${id}`,
-//       {
-//         method: "PUT",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ travellerDetails: formValues }),
-//       }
-//     );
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! status: ${response.status}`);
-//     }
-//     const data = await response.json();
-//     console.log("data: ", data);
-//   } catch (error) {
-//     console.error("Failed to update traveller details:", error);
-//     // Handle the error appropriately
-//   }
-// }
+
 
 app.put('/updateTravellerDetails/:id', async (req, res) => {
   const { id } = req.params;
@@ -845,52 +824,7 @@ app.put('/updateTravellerDetails/:id', async (req, res) => {
   }
 }
 );
-// await user.find(query.length ? { $or: query } : {});
-// app.get("/itineraries", async (req, res) => {
-//   const { agentUID, email } = req.query; // Retrieve agentUID and email from query parameters
 
-//   try {
-//     let query = [];
-
-//     // Add conditions to the query array if agentUID and email are provided
-//     if (agentUID) {
-//       query.push({ agentUID: agentUID });
-//     }
-//     if (email) {
-//       query.push({ agentEmail: email });
-//     }
-// const AllDataSortedByAgentEmail = {};
-//     if(email === "ayushjha@travaura.com" || agentUID === "BWgaKt1CsgegQ4gDJPsvfy5iPu42"){
-      
-//     }
-      
-
-
-//     const itineraries = await user.find(query.length ? { $or: query } : {});
-    
-//     let itinerariesWithNameAndID = itineraries.map((itinerary) => ({
-//       _id: itinerary._id,
-//       name: itinerary.travellerDetails.name,
-//       Days: itinerary.travellerDetails.duration,
-//       ActivitiesCount: itinerary.selectedActivities.length,
-//       FLightsIncluded: itinerary.selectedDomesticFlights.length + itinerary.selectedInternationalFlights.length + itinerary.BookingSelectedDomesticFlights.length + itinerary.BookingSelectedInternationalFlights.length,
-//       country: itinerary.travellerDetails.country,
-//       agentUID: itinerary.agentUID,
-//       agentEmail: itinerary.agentEmail,
-//       createdAt: itinerary.createdAt,
-//       visa: itinerary.travellerDetails.visa,
-//       TravelDate: itinerary.travellerDetails.dateOfTravel,
-//       adults: itinerary.travellerDetails.adults,
-//       children: itinerary.travellerDetails.child,
-//       infants: itinerary.travellerDetails.infants,
-//     }));
-// itinerariesWithNameAndID = itinerariesWithNameAndID.reverse();
-//     res.json(itinerariesWithNameAndID);
-//   } catch (error) {
-//     console.error("Error during database fetch:", error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
 
 app.get("/itineraries", async (req, res) => {
   const { agentUID, email} = req.query; 
@@ -980,6 +914,52 @@ app.get("/itineraries", async (req, res) => {
 });
 
 
+// try {
+//   const response = await fetch(
+//     `http://localhost:5001/Updatehotels/${selectedHotel._id}`,
+//     {
+//       method: "PUT",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(updatedHotel),
+//     }
+//   );
+
+//   if (!response.ok) throw new Error("Failed to update hotel");
+
+//   // Optionally, fetch the updated list of hotels from the server
+// } catch (error) {
+//   console.error("Error updating hotel:", error);
+// }
+
+app.put('/Updatehotels/:id', async (req, res) => {
+  const { id } = req.params;
+  const updatedHotelData = req.body; // Assuming this is the updated hotel data object
+console.log(updatedHotelData);
+  // Define your three collections/models
+  const models = [ThailandHotelsSchema, BaliHotelsModel, hotel];
+
+  try {
+    // Promise.all will execute all the findByIdAndUpdate operations in parallel
+    const updates = await Promise.all(models.map(Model => {
+      // findByIdAndUpdate to update the document in each collection
+      return Model.findByIdAndUpdate(id, updatedHotelData, { new: true });
+    }));
+
+    // Filter out null responses (in case the ID wasn't found in some collections)
+    const updatedDocuments = updates.filter(update => update !== null);
+
+    if (updatedDocuments.length > 0) {
+      res.json(updatedDocuments); // Send back the updated documents
+    } else {
+      res.status(404).send('Document not found in any collection');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
 
 
 
