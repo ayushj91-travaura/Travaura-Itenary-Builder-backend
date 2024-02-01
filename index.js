@@ -93,8 +93,8 @@ async function compressPDF(inputPath, outputPath) {
         "Content-Type": "application/pdf",
         "Access-Control-Allow-Origin": "*",
       });
-      // res.sendFile(pdfPath);
-      res.download(pdfPath);
+      res.sendFile(pdfPath);
+      // res.download(pdfPath);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });
