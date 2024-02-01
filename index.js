@@ -41,65 +41,67 @@ mongoose
 
 
 
-async function compressPDF(inputPath, outputPath) {
-  const inputPdfBytes = fs.readFileSync(inputPath);
-  const pdfDoc = await PDFDocument.load(inputPdfBytes);
+// async function compressPDF(inputPath, outputPath) {
+//   const inputPdfBytes = fs.readFileSync(inputPath);
+//   const pdfDoc = await PDFDocument.load(inputPdfBytes);
   
-  // Modify the document or re-encode images as needed
+//   // Modify the document or re-encode images as needed
 
-  const outputPdfBytes = await pdfDoc.save();
-  fs.writeFileSync(outputPath, outputPdfBytes);
-}
+//   const outputPdfBytes = await pdfDoc.save();
+//   fs.writeFileSync(outputPath, outputPdfBytes);
+// }
 
-  app.get("/generate-pdf/:id", async (req, res) => {
-    const { id } = req.params;
+//   app.get("/generate-pdf/:id", async (req, res) => {
+//     const { id } = req.params;
   
-    try {
-      const browser = await puppeteer.launch({ headless: true });
-      const page = await browser.newPage();
+//     try {
+//       const browser = await puppeteer.launch({ headless: true });
+//       const page = await browser.newPage();
   
-      await page.goto(`https://www.travaura.in/resultPage/${id}`, {
-        waitUntil: "networkidle2",
-      });
-      await page.waitForTimeout(10000);
-  const pageHeight = await page.evaluate(() => document.body.scrollHeight);
-      // Optionally, set a standard viewport width. Height is not critical here as PDF will be as long as the content.
-      await page.setViewport({ width: 1920, height: pageHeight });
+//       await page.goto(`https://www.travaura.in/resultPage/${id}`, {
+//         waitUntil: "networkidle2",
+//       });
+//       await page.waitForTimeout(10000);
+//   const pageHeight = await page.evaluate(() => document.body.scrollHeight);
+//       // Optionally, set a standard viewport width. Height is not critical here as PDF will be as long as the content.
+//       await page.setViewport({ width: 1300, height: pageHeight });
   
-      // Add a timeout to ensure all dynamic elements are fully loaded.
-      // Adjust this timeout based on your page's needs.
+//       // Add a timeout to ensure all dynamic elements are fully loaded.
+//       // Adjust this timeout based on your page's needs.
   
-      // Check if the directory exists, and if not, create it
-      const dirPath = path.join(__dirname, "../public");
-      if (!fs.existsSync(dirPath)) {
-        fs.mkdirSync(dirPath, { recursive: true });
-      }
+//       // Check if the directory exists, and if not, create it
+//       const dirPath = path.join(__dirname, "../public");
+//       if (!fs.existsSync(dirPath)) {
+//         fs.mkdirSync(dirPath, { recursive: true });
+//       }
   
-      const pdfPath = path.join(dirPath, `file-${id}.pdf`);
+//       const pdfPath = path.join(dirPath, `file-${id}.pdf`);
   
-      // Generate and save the PDF. Omitting 'format' and 'height' lets Puppeteer set the page height dynamically.
-      await page.pdf({
-        path: pdfPath,
-        printBackground: true,
-        width: '1420px', // Set the width. The height will be automatically adjusted to fit the content.
-        height: pageHeight,
-      });
+//       // Generate and save the PDF. Omitting 'format' and 'height' lets Puppeteer set the page height dynamically.
+//       await page.pdf({
+//         path: pdfPath,
+//         printBackground: true,
+//         width: '1300px', // Set the width. The height will be automatically adjusted to fit the content.
+//         height: pageHeight,
+//         compressPDF: true,
+        
+//       });
   
-      // Close the browser
-      await browser.close();
+//       // Close the browser
+//       await browser.close();
   
-      // Set headers and send the file
-      res.set({
-        "Content-Type": "application/pdf",
-        "Access-Control-Allow-Origin": "*",
-      });
-      res.sendFile(pdfPath);
-      // res.download(pdfPath);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  });
+//       // Set headers and send the file
+//       res.set({
+//         "Content-Type": "application/pdf",
+//         "Access-Control-Allow-Origin": "*",
+//       });
+//       res.sendFile(pdfPath);
+//       // res.download(pdfPath);
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ error: "Internal Server Error" });
+//     }
+//   });
   
   
 
