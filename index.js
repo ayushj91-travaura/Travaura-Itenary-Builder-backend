@@ -752,11 +752,11 @@ app.get('/api/ThailandActivitiesSchema', async (req, res) => {
 }
 );
 
-const ThailandHotelsSchema = require('./backend-api/model/ThailandHotels');
+const  ThailandHotels = require('./backend-api/model/ThailandHotels');
 
 app.get('/api/ThailandHotelsSchema', async (req, res) => {
   try {
-    const ThailandHotelsSchemas = await ThailandHotelsSchema.find();
+    const ThailandHotelsSchemas = await ThailandHotels.find();
     res.json(ThailandHotelsSchemas);
     console.log("mongo working fine!!");
   } catch (error) {
@@ -938,7 +938,7 @@ app.put('/Updatehotels/:id', async (req, res) => {
   const updatedHotelData = req.body; // Assuming this is the updated hotel data object
 console.log(updatedHotelData);
   // Define your three collections/models
-  const models = [ThailandHotelsSchema, BaliHotelsModel, hotel];
+  const models = [ BaliHotelsModel, hotel, ThailandHotels ];
 
   try {
     // Promise.all will execute all the findByIdAndUpdate operations in parallel
@@ -951,8 +951,10 @@ console.log(updatedHotelData);
     const updatedDocuments = updates.filter(update => update !== null);
 
     if (updatedDocuments.length > 0) {
+      console.log(updatedDocuments);
       res.json(updatedDocuments); // Send back the updated documents
     } else {
+      console.log("not working");
       res.status(404).send('Document not found in any collection');
     }
   } catch (error) {
@@ -960,6 +962,42 @@ console.log(updatedHotelData);
     res.status(500).send(error);
   }
 });
+
+app.put('/UpdateActivities/:id', async (req, res) => {
+  const { id } = req.params;
+  const updatedActivityData = req.body; // Assuming this is the updated hotel data object
+console.log(updatedActivityData);
+  // Define your three collections/models
+  const models = [ThailandActivitiesSchema, BaliData, data];
+
+  try {
+    // Promise.all will execute all the findByIdAndUpdate operations in parallel
+    const updates = await Promise.all(models.map(Model => {
+      // findByIdAndUpdate to update the document in each collection
+      return Model.findByIdAndUpdate(id, updatedActivityData, { new: true });
+    }));
+
+    
+    const updatedDocuments = updates.filter(update => update !== null);
+
+    if (updatedDocuments.length > 0) {
+      console.log("document updated");
+      // console.log(updatedDocuments);
+      console.log(updates);
+      res.json(updatedDocuments); // Send back the updated documents
+      
+      
+    } else {
+      console.log("not working");
+      
+      res.status(404).send('Document not found in any collection');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+}
+);
 
 
 

@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 
 const thailandHotelsSchema = new mongoose.Schema({
-    _id: {
-        $oid: { type: mongoose.Schema.Types.ObjectId, auto: true }
-    },
+    _id: mongoose.Schema.Types.ObjectId,
     Region: { type: String, default: "" },
     City: { type: String, default: "" },
     Category: { type: String, default: "" },
@@ -14,5 +12,6 @@ const thailandHotelsSchema = new mongoose.Schema({
     Images: { type: [String], default: [] },  // Default to an empty array for Images
     PriceType: { type: String, default: "" }
 }, { collection: 'ThailandHotels' });
+const ThailandHotels= mongoose.model('ThailandHotels', thailandHotelsSchema);
 
-module.exports = mongoose.model('ThailandHotels', thailandHotelsSchema);
+module.exports = ThailandHotels;

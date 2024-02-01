@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const baliHotelsSchema = new mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
   Region: String,
   City: String,
   Category: String,

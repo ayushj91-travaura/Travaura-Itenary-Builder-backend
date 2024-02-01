@@ -23,7 +23,10 @@ const CambodiaHotelsSchema = new mongoose.Schema({
     cities: [CitySchema]
 });
 
-module.exports = mongoose.model('CambodiaHotels', CambodiaHotelsSchema);
+const CambodiaHotels
+= mongoose.model('CambodiaHotels', CambodiaHotelsSchema);
+
+module.exports = CambodiaHotels;
 
 
 // "Region": "North",

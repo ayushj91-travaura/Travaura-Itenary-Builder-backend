@@ -8,5 +8,6 @@ const baliIntercityTransfersSchema = new Schema({
     priceUsd: { type: Number},
     priceInr: { type: Number}
 });
+const BaliIntercityTransfers= mongoose.model('BaliIntercityTransfers', baliIntercityTransfersSchema);
 
-module.exports = mongoose.model('BaliIntercityTransfers', baliIntercityTransfersSchema);
+module.exports = BaliIntercityTransfers;

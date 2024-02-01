@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 
 const thailandActivitiesSchema = new mongoose.Schema({
-    _id: {
-        $oid: { type: mongoose.Schema.Types.ObjectId, required: true }
-    },
+    _id: mongoose.Schema.Types.ObjectId,
     Country: { type: String, default: "" },
     PartofCountry: { type: String, default: "" },
     City: { type: String, default: "" },
@@ -43,4 +41,6 @@ const thailandActivitiesSchema = new mongoose.Schema({
     Tags: { type: String, default: "" }
 }, { collection: 'ThailandActivities' });
 
-module.exports = mongoose.model('ThailandActivities', thailandActivitiesSchema);
+const ThailandActivities = mongoose.model('ThailandActivities', thailandActivitiesSchema);
+
+module.exports = ThailandActivities;

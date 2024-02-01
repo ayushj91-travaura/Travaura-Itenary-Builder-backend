@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const baliDataSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     Country: String,
     PartofCountry: String,
     City: String,
