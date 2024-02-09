@@ -1066,7 +1066,7 @@ app.get('/health', async (req, res) => {
     res.status(503).send('Service Unavailable');
   }
 });
-
+ 
 async function checkDatabaseConnectivity() {
   try {
     await mongoose.connection.db.admin().ping();
