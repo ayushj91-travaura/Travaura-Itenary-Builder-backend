@@ -1,5 +1,5 @@
 const express = require("express");
-
+const { admin, fetchUserData, verifyUserToken } = require('./Firebase_auth/firebase_auth');
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
@@ -12,7 +12,12 @@ const Api2Pdf = require("api2pdf");
 const fs = require('fs');
 
 
+
+
+
 app.use(cors());
+
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -38,6 +43,8 @@ mongoose
   .catch((err) => {
     console.error(err);
   });
+
+//firebase auth
 
 
 
@@ -103,11 +110,48 @@ mongoose
 //     }
 //   });
   
+
+app.get("/user", async (req, res) => {
+  const { uid} = req.headers;
+let name;
+  admin.auth().getUser(uid)
+    .then(userRecord => {
+      console.log('Successfully fetched user data:', userRecord.toJSON());
+      name = userRecord.displayName;
+      console.log(name);
+      if (userRecord.email === 'ayushjha@travaura.com') {
+      
+        console.log('User is an admin');
+        dd.then((result) => {
+          res.json(result);
+        }
+        );
+      }
+      else{
+        console.log('User is an user');
+        res.send(name);
+      }
+        
+      
+    })
+    .catch(error => {
+      console.error('Error fetching user data:', error);
+    }
+  );
+});
   
 
 const data = require("./backend-api/model/data");
 
+const dd = new Promise((resolve, reject) => {
+  data.find().then((result) => {
+    resolve(result);
+  });
+} 
+);
+
 app.get("/api/data", async (req, res) => {
+  
   try {
     const datas = await data.find();
     res.json(datas);
@@ -849,6 +893,34 @@ app.put("/updateTravellerDetails/:id", async (req, res) => {
   }
 });
 
+app.put("/updateSelectedHotels/:id", async (req, res) => {
+  const { id } = req.params;
+  const { selectedHotels } = req.body;
+  console.log(selectedHotels);
+  console.log(id);
+
+  try {
+    const updatedDocument = await user.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          selectedHotels: selectedHotels,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+
+    res.json(updatedDocument);
+  } catch (error) {
+    res.status
+    (500).
+    send(error
+    );
+  }
+});
+
 app.get("/itineraries", async (req, res) => {
   const { agentUID, email } = req.query;
   const isAdmin = req.query.isAdmin === "true";
@@ -1025,8 +1097,114 @@ app.put("/UpdateActivities/:id", async (req, res) => {
   }
 });
 
+const packageSchema = require("./backend-api/model/PackageModels/Package");
+
+app.get("/api/packages", async (req, res) => {
+  
+  try {
+    const packageSchemas = await packageSchema.find();
+    res.json(packageSchemas);
+    console.log("mongo working fine!!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+);
+
+app.post("/api/package/:id", async (req, res) => {
+  const id = req.body.id;
+  try {
+    let packageInstance = await packageSchema.findById(id); // Changed variable name
+    if (packageInstance) {
+      // Update existing document
+      packageInstance = await packageSchema.findByIdAndUpdate(id, req.body, { new: true });
+    } else {
+      // Create a new document
+      packageInstance = new packageSchema({ // Changed variable name
+        _id: req.body.id,
+        agentEmail: req.body.agentEmail,
+        createdAt: req.body.createdAt,
+        agentUID: req.body.agentUID,
+        country: req.body.country,
+        isPackage: req.body.isPackage,
+        packageDetails: req.body.packageDetails,
+        selectedActivities: req.body.selectedActivities,
+        selectedHotels: req.body.selectedHotels,
+        selectedTransfers: req.body.selectedTransfers,
+        selectedAddons: req.body.selectedAddons,
+        selectedBuses: req.body.selectedBuses,
+        selectedTrains: req.body.selectedTrains,
+        selectedCambodiaPackage: req.body.selectedCambodiaPackage,
+        CambodiaWhen: req.body.CambodiaWhen,
+        CambodiaAccomodationType: req.body.CambodiaAccomodationType,
+        selectedCambodiaHotels: req.body.selectedCambodiaHotels,
+        selectedAirportTransferCities: req.body.selectedAirportTransferCities,
+      });
+      await packageInstance.save(); // Changed variable name
+    }
+    res.send(packageInstance); // Changed variable name
+    console.log(req.body);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/api/package/:id", async (req, res) => {
+  try {
+    const packageInstance = await packageSchema.findById(req.params.id);
+    res.send(packageInstance);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+      
+app.get("/api/check/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const userInstance = await user.findById(id);
+    if (userInstance) {
+      res.json({ message: "ID exists" });
+    } else {
+      res.json({ message: "ID does not exist" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+);
+
+
+
+
 const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
 });
+
+
+
+
+// const checkIfIDExists = () => {
+//   if(sessionStorage.getItem("customId")){
+//     fetch(`https://travaura-api.azurewebsites.net/api/check/${sessionStorage.getItem("customId")}`)
+//     .then((response) => response.json())
+//     .then((data) => {
+//       if(data.message === "ID exists"){
+//         const confirm = window.confirm("An itinerary with this ID already exists. Do you want to create a new one?");
+//         if (confirm) {
+//           sessionStorage.removeItem("customId");
+//           setCustomId(generateCustomId());
+//           window.location.reload();
+//         } else {
+//           setCustomId(sessionStorage.getItem("customId"));
+//         }
+//       }
+//     });
+//   }
+// }
