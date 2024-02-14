@@ -4,7 +4,7 @@
   "description": "api with dummy data",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"No test specified\" && exit 1",
+   
     "start": "nodemon index.js"
   },
   "author": "Ayush Jha",
