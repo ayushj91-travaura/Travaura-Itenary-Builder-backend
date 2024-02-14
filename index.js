@@ -1035,6 +1035,7 @@ app.put("/UpdateActivities/:id", async (req, res) => {
 });
 
 const packageSchema = require("./backend-api/model/PackageModels/Package");
+const { error } = require("console");
 
 app.get("/api/packages", async (req, res) => {
   
@@ -1149,8 +1150,50 @@ app.get("/api/check/:id", async (req, res) => {
 }
 );
 
- 
+const FLightVoucher = require("./backend-api/model/FlightVoucher");
+// agentUID: currentUser.uid || "",
+//     agentEmail: currentUser.email || "",
+//     agentName: currentUser.displayName || "",
+//     createdAt: new Date().toISOString(),
+app.post("/api/flightVoucher", async (req, res) => {
+  const details = req.body;
+  try {
+    const flightVoucherData = new FLightVoucher({
+     name: details.name,
+      bookingID: details.bookingID,
+      VoucherLink: details.VoucherLink,
+      agentUID: details.agentUID,
+      agentEmail: details.agentEmail,
+      agentName: details.agentName,
+    });
+    await flightVoucherData.save();
+    res.send(flightVoucherData);
+    console.log(req.body);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+  }
+);
 
+app.get("/api/getFlightVoucher", async (req, res) => {
+  try {
+    const flightVoucherData = await FLightVoucher.find();
+    res.json(flightVoucherData);
+    console.log("mongo working fine!!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+);
+
+ 
+app.use((error, req, res, next) => {
+  console.error(error.stack);
+  res.status(500).send("Something broke!");
+}
+);
 
 const PORT = process.env.PORT || 5001; 
 
